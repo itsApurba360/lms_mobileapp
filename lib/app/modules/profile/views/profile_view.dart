@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lms_app/app/routes/app_pages.dart';
 import '../controllers/profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
@@ -78,13 +79,15 @@ class ProfileView extends GetView<ProfileController> {
                     context,
                     icon: Icons.person_outline,
                     label: 'My Profile',
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed(Routes.MYPROFILE);
+                    },
                     iconColor: primaryColor,
                   ),
                   _buildMenuItem(
                     context,
-                    icon: Icons.book,
-                    label: 'Payment Methods',
+                    icon: Icons.menu_book_rounded,
+                    label: 'My Courses',
                     onTap: () {},
                     iconColor: primaryColor,
                   ),
