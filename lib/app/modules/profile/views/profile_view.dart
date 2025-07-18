@@ -77,13 +77,13 @@ class ProfileView extends GetView<ProfileController> {
                   _buildMenuItem(
                     context,
                     icon: Icons.person_outline,
-                    label: 'Your Profile',
+                    label: 'My Profile',
                     onTap: () {},
                     iconColor: primaryColor,
                   ),
                   _buildMenuItem(
                     context,
-                    icon: Icons.credit_card_outlined,
+                    icon: Icons.book,
                     label: 'Payment Methods',
                     onTap: () {},
                     iconColor: primaryColor,
