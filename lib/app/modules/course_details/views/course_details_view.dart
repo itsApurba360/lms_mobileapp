@@ -67,11 +67,29 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
     },
   ];
 
+  final List<Map<String, dynamic>> resources = [
+    {
+      'title': 'Flutter Documentation',
+      'date': '2023-01-01',
+      'locked': false,
+    },
+    {
+      'title': 'GetX Documentation',
+      'date': '2023-01-02',
+      'locked': true,
+    },
+    {
+      'title': 'Flutter & GetX Course',
+      'date': '2023-01-03',
+      'locked': false,
+    },
+  ];
+
   List<bool> isChapterExpanded = [];
 
   @override
   Widget build(BuildContext context) {
-    const bodyGrey = Color(0xFFF5F5F5);
+    const bodyGrey = Color.fromARGB(255, 244, 244, 244);
 
     // 💥 Dynamically fix expansion state length
     if (isChapterExpanded.length != chapters.length) {
@@ -81,12 +99,34 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
     return Scaffold(
       backgroundColor: bodyGrey,
       appBar: AppBar(
-        title: const Text('Course Details'),
-        centerTitle: true,
+        automaticallyImplyLeading: false, // prevent default back arrow
+        titleSpacing: 0, // make sure title starts from the left
+        title: Row(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            const Text(
+              'Course Details',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
         actions: [
           IconButton(
+            icon: const Icon(Icons.shopping_cart),
+            onPressed: () {
+              // handle cart action
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.share),
-            onPressed: () {},
+            onPressed: () {
+              // handle share action
+            },
           ),
         ],
       ),
@@ -235,7 +275,7 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
                         tabs: [
                           Tab(text: "Info"),
                           Tab(text: "Chapters"),
-                          Tab(text: "Reviews"),
+                          Tab(text: "Resources"),
                         ],
                       ),
                     ),
@@ -271,7 +311,7 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.grey.shade300),
+                        border: Border.all(color: Colors.grey.shade200),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -428,7 +468,66 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
               ),
 
               // TAB 3: Reviews
-              Center(child: Text("Reviews will appear here")),
+              // TAB 3: Resources Tab
+              ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: resources.length,
+                itemBuilder: (context, index) {
+                  final item = resources[index];
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.shade200),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Title and Date
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item['title'],
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                item['date'],
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        // Icon Button
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFDFF5E1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            item['locked'] ? Icons.lock : Icons.download,
+                            color: Colors.green,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),

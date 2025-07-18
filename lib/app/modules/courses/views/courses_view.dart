@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lms_app/app/routes/app_pages.dart';
 import '../controllers/courses_controller.dart';
 
 class CoursesView extends GetView<CoursesController> {
@@ -14,8 +15,8 @@ class CoursesView extends GetView<CoursesController> {
         "title": "Mastering Flutter for Beginners",
         "rating": 4,
         "duration": "4 hrs",
-        "price": 60.0,
-        "discounted": 36.0
+        "price": 999.0,
+        "discounted": 648.0
       },
       {
         "image":
@@ -23,8 +24,8 @@ class CoursesView extends GetView<CoursesController> {
         "title": "Advanced React Techniques",
         "rating": 5,
         "duration": "6 hrs",
-        "price": 100.0,
-        "discounted": 60.0
+        "price": 999.0,
+        "discounted": 648.0
       },
       {
         "image":
@@ -32,7 +33,7 @@ class CoursesView extends GetView<CoursesController> {
         "title": "Python for Data Science",
         "rating": 3,
         "duration": "3 hrs",
-        "price": 80.0,
+        "price": 999.0,
         "discounted": null
       },
       {
@@ -41,8 +42,8 @@ class CoursesView extends GetView<CoursesController> {
         "title": "JavaScript Crash Course",
         "rating": 4,
         "duration": "2 hrs",
-        "price": 50.0,
-        "discounted": 30.0
+        "price": 999.0,
+        "discounted": 648.0
       },
       {
         "image":
@@ -50,8 +51,8 @@ class CoursesView extends GetView<CoursesController> {
         "title": "Fullstack Web Dev Bootcamp",
         "rating": 5,
         "duration": "8 hrs",
-        "price": 120.0,
-        "discounted": 72.0
+        "price": 999.0,
+        "discounted": 648.0
       },
       {
         "image":
@@ -59,13 +60,13 @@ class CoursesView extends GetView<CoursesController> {
         "title": "Cloud Computing Essentials",
         "rating": 4,
         "duration": "5 hrs",
-        "price": 90.0,
+        "price": 999.0,
         "discounted": null
       },
     ];
 
     return Container(
-      color: const Color(0xFFF5F5F5),
+      color: Color.fromARGB(255, 244, 244, 244),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -82,7 +83,13 @@ class CoursesView extends GetView<CoursesController> {
         body: ListView.builder(
           padding: const EdgeInsets.symmetric(vertical: 16),
           itemCount: courseList.length,
-          itemBuilder: (_, i) => _courseCard(courseList[i]),
+          itemBuilder: (_, i) => GestureDetector(
+            onTap: () => Get.toNamed(
+              Routes.COURSE_DETAILS,
+              arguments: {'id': courseList[i]['id'], 'course': courseList[i]},
+            ),
+            child: _courseCard(courseList[i]),
+          ),
         ),
       ),
     );
@@ -179,14 +186,14 @@ class CoursesView extends GetView<CoursesController> {
                               fontSize: 14, color: Colors.grey)),
                       const Spacer(),
                       if (hasDiscount)
-                        Text('\$${course["price"].toStringAsFixed(2)}',
+                        Text('₹${course["price"].toStringAsFixed(0)}',
                             style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey,
                                 decoration: TextDecoration.lineThrough)),
                       if (hasDiscount) const SizedBox(width: 6),
                       Text(
-                          '\$${(course["discounted"] ?? course["price"]).toStringAsFixed(2)}',
+                          '\₹${(course["discounted"] ?? course["price"]).toStringAsFixed(2)}',
                           style: TextStyle(
                               fontSize: 14,
                               color: hasDiscount ? Colors.red : Colors.green,
