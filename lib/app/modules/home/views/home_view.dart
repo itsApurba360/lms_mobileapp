@@ -10,16 +10,16 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final PageController _pageController = PageController();
-    final ValueNotifier<int> _pageIndex = ValueNotifier(0);
-    final PageController _carouselController = PageController();
+    final PageController pageController = PageController();
+    final ValueNotifier<int> pageIndex = ValueNotifier(0);
+    final PageController carouselController = PageController();
 
     // Auto-scroll carousel
     Timer.periodic(Duration(seconds: 4), (timer) {
-      if (_carouselController.hasClients) {
-        int nextPage = _carouselController.page!.round() + 1;
+      if (carouselController.hasClients) {
+        int nextPage = carouselController.page!.round() + 1;
         if (nextPage >= 3) nextPage = 0;
-        _carouselController.animateToPage(
+        carouselController.animateToPage(
           nextPage,
           duration: Duration(milliseconds: 500),
           curve: Curves.easeInOut,
@@ -66,7 +66,7 @@ class HomeView extends GetView<HomeController> {
               SizedBox(height: 20),
               _buildSearchBox(),
               SizedBox(height: 12),
-              _buildImageCarousel(_carouselController),
+              _buildImageCarousel(carouselController),
               SizedBox(height: 20),
               _buildGridIcons(),
               SizedBox(height: 20),
