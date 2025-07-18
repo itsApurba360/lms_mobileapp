@@ -95,7 +95,9 @@ class ProfileView extends GetView<ProfileController> {
                     context,
                     icon: Icons.settings_outlined,
                     label: 'Settings',
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed(Routes.SETTINGS);
+                    },
                     iconColor: primaryColor,
                   ),
                   _buildMenuItem(

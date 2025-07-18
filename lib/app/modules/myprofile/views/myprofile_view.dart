@@ -77,7 +77,6 @@ class MyprofileView extends GetView<MyprofileController> {
               // Email
               _buildTextField(
                   label: 'Email', initialValue: 'prasanth@gmail.com'),
-              const SizedBox(height: 16),
 
               const SizedBox(height: 32),
 
