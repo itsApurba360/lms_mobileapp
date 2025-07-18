@@ -111,7 +111,7 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
             ),
             const Text(
               'Course Details',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
             ),
           ],
         ),
@@ -138,12 +138,12 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
             Expanded(
               flex: 3,
               child: Padding(
-                padding: const EdgeInsets.only(left: 8),
+                padding: const EdgeInsets.only(left: 10),
                 child: const Text(
-                  "₹499",
+                  "₹4999",
                   style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w500,
                     color: Colors.black87,
                   ),
                 ),
@@ -342,7 +342,7 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
                                     ),
                                     if (!isExpanded)
                                       Padding(
-                                        padding: const EdgeInsets.only(top: 4),
+                                        padding: const EdgeInsets.only(top: 2),
                                         child: Text(
                                           '${lessons.length > 5 ? 5 : lessons.length} lessons',
                                           style: TextStyle(
@@ -393,7 +393,7 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
                                             '${(lessonIndex + 1).toString().padLeft(2, '0')}',
                                             style: const TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 16,
+                                              fontSize: 14,
                                             ),
                                           ),
                                           const SizedBox(width: 12),
@@ -412,7 +412,7 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
                                                     fontWeight: FontWeight.w500,
                                                   ),
                                                 ),
-                                                const SizedBox(height: 4),
+                                                const SizedBox(height: 2),
                                                 Row(
                                                   children: [
                                                     Text(
@@ -575,12 +575,12 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
                   child: Container(
                     height: 60,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [bodyGrey.withOpacity(0.0), bodyGrey],
-                      ),
-                    ),
+                        // gradient: LinearGradient(
+                        //   begin: Alignment.topCenter,
+                        //   end: Alignment.bottomCenter,
+                        //   colors: [bodyGrey.withOpacity(0.0), bodyGrey],
+                        // ),
+                        ),
                   ),
                 ),
             ],
@@ -592,6 +592,7 @@ class _CourseDetailsViewState extends State<CourseDetailsView> {
                   isExpandedLearn = !isExpandedLearn;
                 });
               },
+              style: TextButton.styleFrom(foregroundColor: Colors.green),
               child: Text(isExpandedLearn ? "View Less" : "View More"),
             ),
           const SizedBox(height: 24),

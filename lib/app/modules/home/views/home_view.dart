@@ -39,19 +39,41 @@ class HomeView extends GetView<HomeController> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.green,
-        unselectedItemColor: Colors.grey,
-        backgroundColor: Colors.white,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.menu_book), label: "Courses"),
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
+      bottomNavigationBar: ValueListenableBuilder<int>(
+        valueListenable: pageIndex,
+        builder: (context, selectedIndex, _) {
+          return BottomNavigationBar(
+            currentIndex: selectedIndex,
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: Colors.green,
+            unselectedItemColor: Colors.grey,
+            backgroundColor: Colors.white,
+            onTap: (index) {
+              switch (index) {
+                case 0:
+                  pageIndex.value = 0; // Stay on Home and highlight it
+                  break;
+                case 1:
+                  Get.toNamed(Routes.COURSES);
+                  break;
+                case 2:
+                  // TODO: Implement Chat navigation if needed
+                  break;
+                case 3:
+                  Get.toNamed(Routes.PROFILE);
+                  break;
+              }
+            },
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.menu_book), label: "Courses"),
+              BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.person), label: "Profile"),
+            ],
+          );
+        },
       ),
       body: Container(
         color: const Color.fromARGB(255, 251, 251, 251),
