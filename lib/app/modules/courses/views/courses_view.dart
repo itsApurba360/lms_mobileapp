@@ -10,8 +10,7 @@ class CoursesView extends GetView<CoursesController> {
   Widget build(BuildContext context) {
     final courseList = [
       {
-        "image":
-            "https://cdn.shopaccino.com/igmguru/products/flutter-igmguru_1527424732_l.jpg?v=531",
+        "image": "assets/images/1.jpg",
         "title": "Mastering Flutter for Beginners",
         "rating": 4,
         "duration": "4 hrs",
@@ -19,8 +18,7 @@ class CoursesView extends GetView<CoursesController> {
         "discounted": 648.0
       },
       {
-        "image":
-            "https://blogs.otpless.com/wp-content/uploads/2023/01/Screenshot-2024-11-12-at-3.11.23%E2%80%AFPM-1024x1024.png",
+        "image": "assets/images/2.png",
         "title": "Advanced React Techniques",
         "rating": 5,
         "duration": "6 hrs",
@@ -28,8 +26,7 @@ class CoursesView extends GetView<CoursesController> {
         "discounted": 648.0
       },
       {
-        "image":
-            "https://eeakolkata.com/wp-content/uploads/2023/10/python-Data-Science-Libraries-With-Implementation.webp",
+        "image": "assets/images/3.png",
         "title": "Python for Data Science",
         "rating": 3,
         "duration": "3 hrs",
@@ -37,8 +34,7 @@ class CoursesView extends GetView<CoursesController> {
         "discounted": null
       },
       {
-        "image":
-            "https://files.ably.io/ghost/prod/2023/12/choosing-the-best-javascript-frameworks-for-your-next-project.png",
+        "image": "assets/images/4.png",
         "title": "JavaScript Crash Course",
         "rating": 4,
         "duration": "2 hrs",
@@ -46,8 +42,7 @@ class CoursesView extends GetView<CoursesController> {
         "discounted": 648.0
       },
       {
-        "image":
-            "https://codingbytes.com/wp-content/uploads/2022/03/full-stack-web-development.jpg",
+        "image": "assets/images/5.jpg",
         "title": "Fullstack Web Dev Bootcamp",
         "rating": 5,
         "duration": "8 hrs",
@@ -55,8 +50,7 @@ class CoursesView extends GetView<CoursesController> {
         "discounted": 648.0
       },
       {
-        "image":
-            "https://cdn.mos.cms.futurecdn.net/v2/t:0,l:0,cw:6499,ch:3656,q:80,w:6499/pL5rBKGq88cnoqgdJgCXGS.jpg",
+        "image": "assets/images/6.jpg",
         "title": "Cloud Computing Essentials",
         "rating": 4,
         "duration": "5 hrs",
@@ -118,7 +112,7 @@ class CoursesView extends GetView<CoursesController> {
                   children: [
                     AspectRatio(
                       aspectRatio: 1,
-                      child: Image.network(
+                      child: Image.asset(
                         course["image"],
                         fit: BoxFit.cover,
                         alignment: Alignment.center,

@@ -30,7 +30,6 @@ class HomeView extends GetView<HomeController> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(icon: Icon(Icons.menu), onPressed: () {}),
-        title: const Center(child: Text('Logo Placeholder')),
         actions: [
           IconButton(
               icon: Icon(Icons.notifications_none_outlined), onPressed: () {}),
@@ -38,6 +37,12 @@ class HomeView extends GetView<HomeController> {
         elevation: 0,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
+        title: Center(
+          child: Image.asset(
+            'assets/images/logo.png',
+            width: 100,
+          ),
+        ),
       ),
       bottomNavigationBar: ValueListenableBuilder<int>(
         valueListenable: pageIndex,
@@ -263,8 +268,8 @@ class HomeView extends GetView<HomeController> {
               padding: EdgeInsets.symmetric(horizontal: 8),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-                child: Image.network(
-                  "https://i.pinimg.com/736x/7e/e9/6a/7ee96a0995e2755c3c744c6678b75968.jpg",
+                child: Image.asset(
+                  "assets/images/banner-1.jpg",
                   fit: BoxFit.cover,
                   width: double.infinity,
                 ),
@@ -460,11 +465,8 @@ class HomeView extends GetView<HomeController> {
             borderRadius: BorderRadius.circular(12),
             child: Stack(
               children: [
-                Image.network(
-                    'https://i.ytimg.com/vi/ix9cRaBkVe0/maxresdefault.jpg',
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: 100),
+                Image.asset('assets/images/python.jpg',
+                    fit: BoxFit.cover, width: double.infinity, height: 100),
                 if (showPill)
                   Positioned(
                     top: 8,
