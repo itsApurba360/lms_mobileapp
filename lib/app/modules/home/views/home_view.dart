@@ -217,8 +217,13 @@ class HomeView extends GetView<HomeController> {
             child: iconTile(Icons.menu_book, 'Courses', Color(0xFFDDEBFF),
                 Color.fromARGB(255, 123, 173, 254)),
           ),
-          iconTile(Icons.help, 'Live Tests & Quizzes', Color(0xFFE5DFFF),
-              Color.fromARGB(255, 187, 158, 255)),
+          GestureDetector(
+            onTap: () {
+              Get.toNamed(Routes.TESTSERIES);
+            },
+            child: iconTile(Icons.help, 'Live Tests & Quizzes',
+                Color(0xFFE5DFFF), Color.fromARGB(255, 187, 158, 255)),
+          ),
           iconTile(Icons.play_circle_fill, 'My Puchases', Color(0xFFFFE6E6),
               Color.fromARGB(255, 255, 168, 168)),
           iconTile(Icons.assignment, 'My\nAssignments', Color(0xFFFFDDE7),
