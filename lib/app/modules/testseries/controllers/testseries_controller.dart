@@ -39,7 +39,7 @@ class TestseriesController extends GetxController {
       'title': 'Mathematics Advanced Mock Test',
       'resultDate': '28 July 2025',
       'attemptedDate': '20 July 2025',
-      'tags': ['Premium', 'Online', 'Test Series']
+      'tags': ['Premium', 'Online']
     },
   ];
 }

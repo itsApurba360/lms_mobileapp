@@ -10,6 +10,8 @@ import '../modules/myprofile/bindings/myprofile_binding.dart';
 import '../modules/myprofile/views/myprofile_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
+import '../modules/result/bindings/result_binding.dart';
+import '../modules/result/views/result_view.dart';
 import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/settings/views/settings_view.dart';
 import '../modules/testseries/bindings/testseries_binding.dart';
@@ -20,7 +22,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.HOME;
+  static const INITIAL = Routes.RESULT;
 
   static final routes = [
     GetPage(
@@ -57,6 +59,11 @@ class AppPages {
       name: _Paths.TESTSERIES,
       page: () => const TestseriesView(),
       binding: TestseriesBinding(),
+    ),
+    GetPage(
+      name: _Paths.RESULT,
+      page: () => const ResultView(),
+      binding: ResultBinding(),
     ),
   ];
 }
