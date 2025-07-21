@@ -11,6 +11,7 @@ abstract class Routes {
   static const SETTINGS = _Paths.SETTINGS;
   static const TESTSERIES = _Paths.TESTSERIES;
   static const RESULT = _Paths.RESULT;
+  static const EXAMLIST = _Paths.EXAMLIST;
 }
 
 abstract class _Paths {
@@ -23,4 +24,5 @@ abstract class _Paths {
   static const SETTINGS = '/settings';
   static const TESTSERIES = '/testseries';
   static const RESULT = '/result';
+  static const EXAMLIST = '/examlist';
 }

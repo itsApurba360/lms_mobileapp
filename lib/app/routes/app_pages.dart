@@ -4,6 +4,8 @@ import '../modules/course_details/bindings/course_details_binding.dart';
 import '../modules/course_details/views/course_details_view.dart';
 import '../modules/courses/bindings/courses_binding.dart';
 import '../modules/courses/views/courses_view.dart';
+import '../modules/examlist/bindings/examlist_binding.dart';
+import '../modules/examlist/views/examlist_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/myprofile/bindings/myprofile_binding.dart';
@@ -64,6 +66,11 @@ class AppPages {
       name: _Paths.RESULT,
       page: () => const ResultView(),
       binding: ResultBinding(),
+    ),
+    GetPage(
+      name: _Paths.EXAMLIST,
+      page: () => const ExamlistView(),
+      binding: ExamlistBinding(),
     ),
   ];
 }
