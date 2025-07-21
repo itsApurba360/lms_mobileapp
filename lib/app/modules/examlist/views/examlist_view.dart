@@ -147,7 +147,7 @@ class ExamlistView extends GetView<ExamlistController> {
                         colorText: Colors.black,
                       );
                     } else {
-                      Get.toNamed('/start-test');
+                      Get.toNamed('/examinstructions');
                     }
                   },
                   child: Row(
