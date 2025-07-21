@@ -1,16 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lms_app/app/modules/testseries/controllers/testseries_controller.dart'; // 👈 Use absolute import ONLY
+import 'package:lms_app/app/modules/testseries/controllers/testseries_controller.dart';
 
 class TestseriesView extends GetView<TestseriesController> {
   const TestseriesView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller =
-        Get.find<TestseriesController>(); // ✅ Use Get.find(), not Get.put()
-
+    final controller = Get.find<TestseriesController>();
     final PageController bannerController = PageController();
     final RxInt currentPage = 0.obs;
 
@@ -26,56 +24,37 @@ class TestseriesView extends GetView<TestseriesController> {
       }
     });
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF4F4F4),
-      appBar: AppBar(
-        title: const Text('Test Series'),
-        centerTitle: true,
-        backgroundColor: Colors.green,
-      ),
-      body: Column(
-        children: [
-          Obx(() => Row(
-                children: [
-                  _buildTab("Ongoing", 0, controller),
-                  _buildTab("Attempted", 1, controller),
-                ],
-              )),
-          const SizedBox(height: 10),
-          Obx(() => controller.selectedTab.value == 0
-              ? _buildOngoingSection(bannerController, currentPage, controller)
-              : _buildAttemptedSection(controller)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTab(String label, int index, TestseriesController controller) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => controller.selectedTab.value = index,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: controller.selectedTab.value == index
-                    ? Colors.green
-                    : Colors.transparent,
-                width: 2,
-              ),
-            ),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF4F4F4),
+        appBar: AppBar(
+          backgroundColor: Colors.white, // ✅ White background
+          title: const Text(
+            'Test Series',
+            style: TextStyle(color: Colors.black), // ✅ Title text black
           ),
-          child: Text(
-            label,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: controller.selectedTab.value == index
-                  ? Colors.green
-                  : Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
+          centerTitle: true,
+          elevation: 1,
+          iconTheme:
+              const IconThemeData(color: Colors.black), // back icon black
+          bottom: const TabBar(
+            labelColor: Colors.green, // ✅ Active tab text color
+            unselectedLabelColor: Colors.black54, // ✅ Inactive tab text color
+            indicatorColor: Colors.green, // ✅ Active tab underline color
+            indicatorWeight: 3,
+            labelStyle: TextStyle(fontWeight: FontWeight.bold),
+            tabs: [
+              Tab(text: 'Ongoing'),
+              Tab(text: 'Attempted'),
+            ],
           ),
+        ),
+        body: TabBarView(
+          children: [
+            _buildOngoingSection(bannerController, currentPage, controller),
+            _buildAttemptedSection(controller),
+          ],
         ),
       ),
     );
@@ -83,72 +62,231 @@ class TestseriesView extends GetView<TestseriesController> {
 
   Widget _buildOngoingSection(PageController bannerController,
       RxInt currentPage, TestseriesController controller) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 160,
-          child: PageView.builder(
-            controller: bannerController,
-            onPageChanged: (index) => currentPage.value = index,
-            itemCount: controller.bannerImages.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    controller.bannerImages[index],
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      color: Colors.grey[300],
-                      alignment: Alignment.center,
-                      child: const Text(
-                        'Image not available',
-                        style: TextStyle(color: Colors.red),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const SizedBox(height: 16),
+          SizedBox(
+            height: 160,
+            child: PageView.builder(
+              controller: bannerController,
+              onPageChanged: (index) => currentPage.value = index,
+              itemCount: controller.bannerImages.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(
+                      controller.bannerImages[index],
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        color: Colors.grey[300],
+                        alignment: Alignment.center,
+                        child: const Text(
+                          'Image not available',
+                          style: TextStyle(color: Colors.red),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 16),
+          Obx(() => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children:
+                    List.generate(controller.bannerImages.length, (index) {
+                  bool isActive = currentPage.value == index;
+                  return Container(
+                    width: isActive ? 16 : 6,
+                    height: 6,
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: isActive ? Colors.green : Colors.grey,
+                    ),
+                  );
+                }),
+              )),
+          const SizedBox(height: 16),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            itemCount: controller.ongoingTests.length,
+            itemBuilder: (context, index) {
+              final test = controller.ongoingTests[index];
+              return _buildExamCard(test);
             },
           ),
-        ),
-        const SizedBox(height: 8),
-        Obx(() => Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(controller.bannerImages.length, (index) {
-                bool isActive = currentPage.value == index;
-                return Container(
-                  width: isActive ? 16 : 6,
-                  height: 6,
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: isActive ? Colors.green : Colors.grey,
+        ],
+      ),
+    );
+  }
+
+  Widget _buildExamCard(Map<String, dynamic> test) {
+    final bool hasDiscount = test['discount'] != null && test['discount'] > 0;
+    final double price = test['price'];
+    final double discountedPrice =
+        hasDiscount ? price - (price * (test['discount'] / 100)) : price;
+
+    return Stack(
+      children: [
+        Container(
+          margin: const EdgeInsets.only(bottom: 18),
+          padding: const EdgeInsets.fromLTRB(10, 10, 14, 10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      test['image'],
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                );
-              }),
-            )),
+                  if (hasDiscount)
+                    Positioned(
+                      top: 4,
+                      left: 4,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.red.shade600,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          '${test['discount']}% OFF',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: SizedBox(
+                  height: 84,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 26),
+                        child: Text(
+                          test['title'],
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            height: 1.3,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Text(
+                            '₹${discountedPrice.toStringAsFixed(0)}',
+                            style: const TextStyle(
+                              fontSize: 15,
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          if (hasDiscount)
+                            Text(
+                              '₹${price.toStringAsFixed(0)}',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: Colors.grey,
+                                decoration: TextDecoration.lineThrough,
+                              ),
+                            ),
+                          const Spacer(),
+                          SizedBox(
+                            height: 34,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green.shade600,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 14, vertical: 0),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                elevation: 0,
+                              ),
+                              onPressed: () {
+                                Get.toNamed('/buy/${test['id']}');
+                              },
+                              child: const Text(
+                                'Buy Now',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          top: 8,
+          right: 8,
+          child: InkWell(
+            onTap: () {
+              print('Share tapped: ${test['title']}');
+            },
+            borderRadius: BorderRadius.circular(20),
+            child: Container(
+              padding: const EdgeInsets.all(6),
+              child: const Icon(Icons.share, size: 18, color: Colors.black87),
+            ),
+          ),
+        ),
       ],
     );
   }
 
   Widget _buildAttemptedSection(TestseriesController controller) {
-    return Expanded(
-      child: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: controller.attemptedTests.length,
-        itemBuilder: (context, index) {
-          final test = controller.attemptedTests[index];
-          return AttemptedCard(
-            title: test['title'],
-            resultDate: test['resultDate'],
-            attemptedDate: test['attemptedDate'],
-            tags: List<String>.from(test['tags']),
-          );
-        },
-      ),
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: controller.attemptedTests.length,
+      itemBuilder: (context, index) {
+        final test = controller.attemptedTests[index];
+        return AttemptedCard(
+          title: test['title'],
+          resultDate: test['resultDate'],
+          attemptedDate: test['attemptedDate'],
+          tags: List<String>.from(test['tags']),
+        );
+      },
     );
   }
 }
@@ -220,7 +358,7 @@ class AttemptedCard extends StatelessWidget {
                 Text.rich(
                   TextSpan(
                     children: [
-                      TextSpan(
+                      const TextSpan(
                         text: 'Results out on : ',
                         style: TextStyle(
                             color: Colors.grey,
@@ -295,7 +433,7 @@ class AttemptedCard extends StatelessWidget {
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                   ),
                   onPressed: () {
-                    // Add your navigation logic or whatever you want here
+                    Get.toNamed('/result');
                   },
                   child: const Text(
                     'View Results',
