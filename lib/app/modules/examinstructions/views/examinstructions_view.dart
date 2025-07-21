@@ -14,16 +14,8 @@ class ExaminstructionsView extends StatefulWidget {
 class _ExaminstructionsViewState extends State<ExaminstructionsView> {
   String? selectedLanguage;
 
-  final List<String> instructions = [
-    "The test contains 25 total questions.",
-    "Each question has 4 options out of which only one is correct.",
-    "You have to finish the test in 20 minutes.",
-    "You will be awarded 2 mark for each correct answer and 0.5 will be deducted for each wrong answer.",
-    "There is no negative marking for the questions that you have not attempted.",
-    "I have read all the instructions carefully and have understood them. I agree not to cheat or use unfair means in this examination. "
-        "I understand that using unfair means of any sort for my own or someone else’s advantage will lead to my immediate disqualification. "
-        "The decision of Testbook.com will be final in these matters and cannot be appealed.",
-  ];
+  final ExaminstructionsController controller =
+      Get.put(ExaminstructionsController());
 
   void onContinue() {
     if (selectedLanguage == null) {
@@ -39,37 +31,94 @@ class _ExaminstructionsViewState extends State<ExaminstructionsView> {
     }
   }
 
+  void _showLanguageSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      backgroundColor: Colors.white,
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                "Choose Language",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const Divider(height: 1, thickness: 1), // Full-width divider
+            ...controller.languages.asMap().entries.map((entry) {
+              final int index = entry.key;
+              final String lang = entry.value;
+              return Column(
+                children: [
+                  RadioListTile<String>(
+                    title: Text(lang),
+                    value: lang,
+                    groupValue: selectedLanguage,
+                    activeColor: Colors.green, // ✅ Green selected radio
+                    onChanged: (value) {
+                      setState(() {
+                        selectedLanguage = value;
+                      });
+                      Navigator.pop(context);
+                    },
+                  ),
+                  if (index < controller.languages.length - 1)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Divider(
+                        height: 1,
+                        thickness: 0.7,
+                        color: Colors.grey.shade300, // ✅ Light + not full width
+                      ),
+                    ),
+                ],
+              );
+            }),
+            const SizedBox(height: 10),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         title: const Text('ExaminstructionsView'),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
+      body: Obx(
+        () => SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'AI - Generated Quantitative Aptitude\nSectional Test - 01',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              Text(
+                controller.examTitle.value,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
               const SizedBox(height: 8),
-              const Row(
+              Row(
                 children: [
                   Text(
-                    "Duration: 20 Mins.",
-                    style: TextStyle(
+                    "Duration: ${controller.duration.value}",
+                    style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 14,
                         fontWeight: FontWeight.w500),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Text(
-                    "Maximum Marks: 50.0",
-                    style: TextStyle(
+                    "Maximum Marks: ${controller.maxMarks.value}",
+                    style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 14,
                         fontWeight: FontWeight.w500),
@@ -77,7 +126,9 @@ class _ExaminstructionsViewState extends State<ExaminstructionsView> {
                 ],
               ),
               const SizedBox(height: 16),
-              ...instructions.map((item) {
+
+              // Dynamic Instructions
+              ...controller.instructions.map((item) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Row(
@@ -88,72 +139,50 @@ class _ExaminstructionsViewState extends State<ExaminstructionsView> {
                     ],
                   ),
                 );
-              }).toList(),
+              }),
+
               const SizedBox(height: 20),
 
-              // ✅ Dropdown with proper popup alignment
-              DropdownButtonHideUnderline(
-                child: Theme(
-                  data: Theme.of(context).copyWith(
-                    canvasColor: Colors.white,
+              // Language Selection Field with arrow
+              InkWell(
+                onTap: () => _showLanguageSheet(context),
+                child: Container(
+                  width: double.infinity,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white,
                   ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: DropdownButton<String>(
-                      isExpanded: true,
-                      hint: const Text(
-                        "Select Language",
-                        style: TextStyle(fontSize: 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          selectedLanguage ?? "Select Language",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: selectedLanguage == null
+                                ? Colors.grey
+                                : Colors.black,
+                          ),
+                        ),
                       ),
-                      value: selectedLanguage,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                      ),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedLanguage = newValue;
-                        });
-                      },
-                      items: const [
-                        DropdownMenuItem(
-                          value: "English",
-                          child: Text(
-                            "English",
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ),
-                        DropdownMenuItem(
-                          value: "Hindi",
-                          child: Text(
-                            "Hindi",
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ),
-                        DropdownMenuItem(
-                          value: "Marathi",
-                          child: Text(
-                            "Marathi",
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ),
-                      ],
-                    ),
+                      const Icon(Icons.arrow_drop_down),
+                    ],
                   ),
                 ),
               ),
 
               const SizedBox(height: 20),
+
+              // Continue Button
               SizedBox(
                 width: double.infinity,
+                height: 50,
                 child: ElevatedButton(
                   onPressed: onContinue,
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
                     backgroundColor: Colors.green,
                     foregroundColor: Colors.white,
                     elevation: 0,
