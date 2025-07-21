@@ -10,6 +10,8 @@ import '../modules/examlist/bindings/examlist_binding.dart';
 import '../modules/examlist/views/examlist_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/mcq/bindings/mcq_binding.dart';
+import '../modules/mcq/views/mcq_view.dart';
 import '../modules/myprofile/bindings/myprofile_binding.dart';
 import '../modules/myprofile/views/myprofile_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
@@ -78,6 +80,11 @@ class AppPages {
       name: _Paths.EXAMINSTRUCTIONS,
       page: () => const ExaminstructionsView(),
       binding: ExaminstructionsBinding(),
+    ),
+    GetPage(
+      name: _Paths.MCQ,
+      page: () => const McqView(),
+      binding: McqBinding(),
     ),
   ];
 }

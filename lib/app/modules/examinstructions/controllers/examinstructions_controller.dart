@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 class ExaminstructionsController extends GetxController {
   // Dynamic data
   final examTitle =
-      'AI - Generated Quantitative Aptitude\nSectional Test - 01'.obs;
+      'AI - Generated Quantitative Aptitude Sectional Test - 01'.obs;
   final duration = '20 Mins.'.obs;
   final maxMarks = '50.0'.obs;
 
@@ -18,11 +18,5 @@ class ExaminstructionsController extends GetxController {
     "Use of any unfair means or malpractice will lead to disqualification.",
     "Ensure a stable internet connection throughout the test duration.",
     "By clicking 'Agree and Continue', you accept all the instructions and terms of this examination.",
-  ].obs;
-
-  final languages = <String>[
-    "English",
-    "Hindi",
-    "Kannada",
   ].obs;
 }
