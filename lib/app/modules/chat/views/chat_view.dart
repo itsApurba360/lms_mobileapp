@@ -41,8 +41,28 @@ class ChatView extends GetView<ChatController> {
                     Stack(
                       children: [
                         CircleAvatar(
-                          backgroundImage: NetworkImage(chat.avatarUrl),
                           radius: 28,
+                          backgroundColor: (chat.avatarUrl == null ||
+                                  chat.avatarUrl!.isEmpty)
+                              ? Colors.green[300]
+                              : Colors.transparent,
+                          backgroundImage: (chat.avatarUrl != null &&
+                                  chat.avatarUrl!.isNotEmpty)
+                              ? AssetImage(chat.avatarUrl!)
+                              : null,
+                          child: (chat.avatarUrl == null ||
+                                  chat.avatarUrl!.isEmpty)
+                              ? Text(
+                                  chat.name.isNotEmpty
+                                      ? chat.name[0].toUpperCase()
+                                      : '?',
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : null,
                         ),
                         if (chat.isActive)
                           Positioned(
