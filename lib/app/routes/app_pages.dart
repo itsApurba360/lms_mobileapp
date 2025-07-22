@@ -14,6 +14,8 @@ import '../modules/examlist/bindings/examlist_binding.dart';
 import '../modules/examlist/views/examlist_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/login/bindings/login_binding.dart';
+import '../modules/login/views/login_view.dart';
 import '../modules/mcq/bindings/mcq_binding.dart';
 import '../modules/mcq/views/mcq_view.dart';
 import '../modules/myprofile/bindings/myprofile_binding.dart';
@@ -32,12 +34,12 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.HOME;
+  static const INITIAL = Routes.LOGIN;
 
   static final routes = [
     GetPage(
-      name: _Paths.HOME,
-      page: () => const HomeView(),
+      name: _Paths.LOGIN,
+      page: () => const LoginView(),
       binding: HomeBinding(),
     ),
     GetPage(
@@ -99,6 +101,11 @@ class AppPages {
       name: _Paths.CHATDETAILS,
       page: () => const ChatdetailsView(),
       binding: ChatdetailsBinding(),
+    ),
+    GetPage(
+      name: _Paths.LOGIN,
+      page: () => const LoginView(),
+      binding: LoginBinding(),
     ),
   ];
 }
