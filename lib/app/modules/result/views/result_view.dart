@@ -13,10 +13,15 @@ class ResultView extends GetView<ResultController> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        backgroundColor: backgroundColor,
         appBar: AppBar(
+          backgroundColor: Colors.white,
           title: const Text('ResultView'),
           centerTitle: true,
           bottom: const TabBar(
+            labelColor: Colors.green,
+            unselectedLabelColor: Colors.black,
+            indicatorColor: Colors.green,
             tabs: [
               Tab(text: 'Analysis'),
               Tab(text: 'Solutions'),
@@ -46,10 +51,10 @@ class _AnalysisTabState extends State<_AnalysisTab> {
 
   final List<String> pillLabels = [
     'Score',
-    'General Intelligence',
-    'General Awareness',
-    'Quantitative Aptitude',
-    'English Language',
+    'Section 1',
+    'Section 2',
+    'Section 3',
+    'Section 4',
   ];
 
   @override
@@ -112,7 +117,7 @@ class _AnalysisTabState extends State<_AnalysisTab> {
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: isSelected ? Colors.green : Colors.grey.shade200,
+                      color: isSelected ? Colors.green : Colors.grey.shade300,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
