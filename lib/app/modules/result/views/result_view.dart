@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/result_controller.dart';
+import '../widgets/solutions.dart';
 
 const Color backgroundColor = Color.fromARGB(255, 244, 244, 244);
 
@@ -25,7 +26,7 @@ class ResultView extends GetView<ResultController> {
         body: const TabBarView(
           children: [
             _AnalysisTab(),
-            Center(child: Text('Solutions Tab')),
+            Solutions(),
           ],
         ),
       ),
