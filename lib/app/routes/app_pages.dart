@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/chat/bindings/chat_binding.dart';
+import '../modules/chat/views/chat_view.dart';
 import '../modules/course_details/bindings/course_details_binding.dart';
 import '../modules/course_details/views/course_details_view.dart';
 import '../modules/courses/bindings/courses_binding.dart';
@@ -85,6 +87,11 @@ class AppPages {
       name: _Paths.MCQ,
       page: () => const McqView(),
       binding: McqBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHAT,
+      page: () => const ChatView(),
+      binding: ChatBinding(),
     ),
   ];
 }

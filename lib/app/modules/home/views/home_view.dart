@@ -62,7 +62,7 @@ class HomeView extends GetView<HomeController> {
                   Get.toNamed(Routes.COURSES);
                   break;
                 case 2:
-                  // TODO: Implement Chat navigation if needed
+                  Get.toNamed(Routes.CHAT);
                   break;
                 case 3:
                   Get.toNamed(Routes.PROFILE);
