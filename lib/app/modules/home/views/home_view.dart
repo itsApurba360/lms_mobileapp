@@ -14,7 +14,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  
+
   void _openDrawer() {
     if (_scaffoldKey.currentState != null) {
       _scaffoldKey.currentState!.openDrawer();
@@ -27,7 +27,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
-    
+
     final PageController pageController = PageController();
     final ValueNotifier<int> pageIndex = ValueNotifier(0);
     final PageController carouselController = PageController();
@@ -360,7 +360,7 @@ class _HomeViewState extends State<HomeView> {
           scrollDirection: Axis.horizontal,
           children: [
             _courseCardV2(
-              title: "How to Travel Around the World",
+              title: "Python for Beginners",
               price: "₹4999.00",
               duration: "230 Hours",
               showPill: true,
