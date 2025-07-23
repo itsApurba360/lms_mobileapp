@@ -169,7 +169,7 @@ class _HomeViewState extends State<HomeView> {
                   ),
                   TextButton(
                     onPressed: () {
-                      // TODO: Add your navigation or action here
+                      Get.toNamed(Routes.COURSES);
                     },
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.zero,
@@ -502,50 +502,81 @@ class _HomeViewState extends State<HomeView> {
     bool showPill = false,
     String pillText = 'New',
   }) {
-    return Container(
-      width: 180,
-      margin: EdgeInsets.only(right: 16),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Stack(
-              children: [
-                Image.asset('assets/images/python.jpg',
-                    fit: BoxFit.cover, width: double.infinity, height: 100),
-                if (showPill)
-                  Positioned(
-                    top: 8,
-                    left: 8,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(12)),
-                      child: Text(pillText,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold)),
-                    ),
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(Routes.COURSE_DETAILS);
+      },
+      child: Container(
+        width: 180,
+        margin: const EdgeInsets.only(right: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Stack(
+                children: [
+                  Image.asset(
+                    'assets/images/python.jpg',
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: 100,
                   ),
-              ],
+                  if (showPill)
+                    Positioned(
+                      top: 8,
+                      left: 8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          pillText,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: 8),
-          Text(title,
-              style: TextStyle(fontWeight: FontWeight.w600),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+              ),
               maxLines: 2,
-              overflow: TextOverflow.ellipsis),
-          SizedBox(height: 4),
-          Text(price,
-              style:
-                  TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
-          Text(duration,
-              style: TextStyle(fontSize: 12, color: Colors.grey[600])),
-        ],
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              price,
+              style: const TextStyle(
+                color: Colors.green,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              duration,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey[600],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/login_controller.dart';
 import '../../otp_login/views/otp_login_view.dart';
+import '../../../routes/app_pages.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -121,7 +122,8 @@ class _LoginViewState extends State<LoginView> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // TODO: Call login function
+                    // Navigate to home view after successful login
+                    Get.offAllNamed(Routes.HOME);
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
