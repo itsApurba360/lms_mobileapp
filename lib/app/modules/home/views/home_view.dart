@@ -2,7 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/home_controller.dart';
-import 'package:lms_app/app/routes/app_pages.dart';
+import '../../notifications/views/notifications_view.dart';
+import '../../../routes/app_pages.dart';
+import '../../notifications/bindings/notifications_binding.dart';
 import '../widgets/menu_drawer.dart';
 
 class HomeView extends StatefulWidget {
@@ -26,11 +28,10 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<HomeController>();
-
-    final PageController pageController = PageController();
-    final ValueNotifier<int> pageIndex = ValueNotifier(0);
-    final PageController carouselController = PageController();
+    final HomeController controller = Get.find<HomeController>();
+    final pageController = PageController();
+    final pageIndex = ValueNotifier(0);
+    final carouselController = PageController();
 
     // Auto-scroll carousel
     Timer.periodic(Duration(seconds: 4), (timer) {
@@ -60,7 +61,14 @@ class _HomeViewState extends State<HomeView> {
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_none_outlined),
-            onPressed: () {},
+            onPressed: () {
+              print('Navigating to notifications...');
+              Get.to(
+                () => NotificationsView(),
+                binding: NotificationsBinding(),
+                preventDuplicates: false,
+              );
+            },
           ),
         ],
         elevation: 0,

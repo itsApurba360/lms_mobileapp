@@ -20,6 +20,8 @@ import '../modules/mcq/bindings/mcq_binding.dart';
 import '../modules/mcq/views/mcq_view.dart';
 import '../modules/myprofile/bindings/myprofile_binding.dart';
 import '../modules/myprofile/views/myprofile_view.dart';
+import '../modules/notifications/bindings/notifications_binding.dart';
+import '../modules/notifications/views/notifications_view.dart';
 import '../modules/otp_login/bindings/otp_login_binding.dart';
 import '../modules/otp_login/views/otp_login_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
@@ -120,6 +122,11 @@ class AppPages {
       name: _Paths.PURCHASES,
       page: () => const PurchasesView(),
       binding: PurchasesBinding(),
+    ),
+    GetPage(
+      name: _Paths.NOTIFICATIONS,
+      page: () => const NotificationsView(),
+      binding: NotificationsBinding(),
     ),
   ];
 }
