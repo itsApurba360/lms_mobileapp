@@ -2,14 +2,32 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/home_controller.dart';
-// import 'package:get/get.dart';
 import 'package:lms_app/app/routes/app_pages.dart';
+import '../widgets/menu_drawer.dart';
 
-class HomeView extends GetView<HomeController> {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  
+  void _openDrawer() {
+    if (_scaffoldKey.currentState != null) {
+      _scaffoldKey.currentState!.openDrawer();
+    } else {
+      // Fallback if the drawer can't be opened directly
+      Scaffold.of(context).openDrawer();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final controller = Get.find<HomeController>();
+    
     final PageController pageController = PageController();
     final ValueNotifier<int> pageIndex = ValueNotifier(0);
     final PageController carouselController = PageController();
@@ -28,11 +46,22 @@ class HomeView extends GetView<HomeController> {
     });
 
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: const MenuDrawer(),
       appBar: AppBar(
-        leading: IconButton(icon: Icon(Icons.menu), onPressed: () {}),
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu_open),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
+        ),
         actions: [
           IconButton(
-              icon: Icon(Icons.notifications_none_outlined), onPressed: () {}),
+            icon: const Icon(Icons.notifications_none_outlined),
+            onPressed: () {},
+          ),
         ],
         elevation: 0,
         backgroundColor: Colors.white,
@@ -141,7 +170,8 @@ class HomeView extends GetView<HomeController> {
                     ),
                     child: Row(
                       children: [
-                        Text('View All'),
+                        Text('View All',
+                            style: TextStyle(color: Colors.grey.shade600)),
                         SizedBox(width: 4),
                         Icon(Icons.arrow_forward_ios,
                             size: 12, color: Colors.grey),
