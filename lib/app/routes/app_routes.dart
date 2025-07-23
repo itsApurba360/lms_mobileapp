@@ -18,6 +18,7 @@ abstract class Routes {
   static const CHATDETAILS = _Paths.CHATDETAILS;
   static const LOGIN = _Paths.LOGIN;
   static const OTP_LOGIN = _Paths.OTP_LOGIN;
+  static const PURCHASES = _Paths.PURCHASES;
 }
 
 abstract class _Paths {
@@ -37,4 +38,5 @@ abstract class _Paths {
   static const CHATDETAILS = '/chatdetails';
   static const LOGIN = '/login';
   static const OTP_LOGIN = '/otp-login';
+  static const PURCHASES = '/purchases';
 }

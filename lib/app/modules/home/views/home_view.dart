@@ -254,8 +254,13 @@ class _HomeViewState extends State<HomeView> {
             child: iconTile(Icons.help, 'Live Tests & Quizzes',
                 Color(0xFFE5DFFF), Color.fromARGB(255, 187, 158, 255)),
           ),
-          iconTile(Icons.play_circle_fill, 'My Puchases', Color(0xFFFFE6E6),
-              Color.fromARGB(255, 255, 168, 168)),
+          GestureDetector(
+            onTap: () {
+              Get.toNamed(Routes.PURCHASES);
+            },
+            child: iconTile(Icons.play_circle_fill, 'My Puchases',
+                Color(0xFFFFE6E6), Color.fromARGB(255, 255, 168, 168)),
+          ),
           iconTile(Icons.assignment, 'My\nAssignments', Color(0xFFFFDDE7),
               Color.fromARGB(255, 255, 167, 197)),
         ],
