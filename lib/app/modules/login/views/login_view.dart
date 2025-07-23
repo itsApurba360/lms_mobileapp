@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/login_controller.dart';
+import '../../otp_login/views/otp_login_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -32,12 +33,15 @@ class _LoginViewState extends State<LoginView> {
               const SizedBox(height: 24),
 
               // "Login to continue"
-              const Text(
-                "Login to continue",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                  color: Color.fromARGB(255, 97, 97, 97),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Login to continue",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.grey.shade600,
+                  ),
                 ),
               ),
 
@@ -110,26 +114,7 @@ class _LoginViewState extends State<LoginView> {
                 ),
               ),
 
-              const SizedBox(height: 2),
-
-              // "Login with Mobile Number" Text Button
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {
-                    // TODO: Navigate to mobile login
-                  },
-                  child: const Text(
-                    "Login with Mobile Number",
-                    style: TextStyle(
-                      color: Colors.green,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 8),
+              const SizedBox(height: 24),
 
               // Login Button
               SizedBox(
@@ -150,6 +135,21 @@ class _LoginViewState extends State<LoginView> {
                   child: const Text(
                     'Login',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+
+              // "Login with Mobile Number" Text Button
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () => Get.to(() => OtpLoginView()),
+                  child: const Text(
+                    "Login with Mobile Number",
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ),

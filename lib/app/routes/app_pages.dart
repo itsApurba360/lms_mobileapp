@@ -20,6 +20,8 @@ import '../modules/mcq/bindings/mcq_binding.dart';
 import '../modules/mcq/views/mcq_view.dart';
 import '../modules/myprofile/bindings/myprofile_binding.dart';
 import '../modules/myprofile/views/myprofile_view.dart';
+import '../modules/otp_login/bindings/otp_login_binding.dart';
+import '../modules/otp_login/views/otp_login_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/result/bindings/result_binding.dart';
@@ -38,8 +40,8 @@ class AppPages {
 
   static final routes = [
     GetPage(
-      name: _Paths.LOGIN,
-      page: () => const LoginView(),
+      name: _Paths.HOME,
+      page: () => const HomeView(),
       binding: HomeBinding(),
     ),
     GetPage(
@@ -106,6 +108,11 @@ class AppPages {
       name: _Paths.LOGIN,
       page: () => const LoginView(),
       binding: LoginBinding(),
+    ),
+    GetPage(
+      name: _Paths.OTP_LOGIN,
+      page: () => OtpLoginView(),
+      binding: OtpLoginBinding(),
     ),
   ];
 }

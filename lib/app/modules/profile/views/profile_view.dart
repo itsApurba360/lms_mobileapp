@@ -195,10 +195,15 @@ class ProfileView extends GetView<ProfileController> {
                 ),
               ),
               const SizedBox(height: 10),
-              const Text(
-                'Are you sure you want to log out?',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15, color: Colors.black54),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Are you sure you want to log out?',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey.shade600,
+                  ),
+                ),
               ),
               const SizedBox(height: 24),
               Row(
@@ -208,7 +213,7 @@ class ProfileView extends GetView<ProfileController> {
                       onPressed: () => Navigator.pop(context),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: Colors.green,
-                        side: const BorderSide(color: Colors.green),
+                        side: const BorderSide(),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -222,8 +227,18 @@ class ProfileView extends GetView<ProfileController> {
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
-                        // TODO: Replace with actual logout logic
-                        Get.snackbar("Logged out", "You have been logged out.");
+                        // Clear any user session data here if needed
+                        // For example: await Get.find<AuthController>().logout();
+
+                        // Show logout message
+                        Get.snackbar(
+                          "Logged out",
+                          "You have been logged out successfully.",
+                          snackPosition: SnackPosition.BOTTOM,
+                        );
+
+                        // Navigate to login screen and remove all previous routes
+                        Get.offAllNamed(Routes.LOGIN);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
