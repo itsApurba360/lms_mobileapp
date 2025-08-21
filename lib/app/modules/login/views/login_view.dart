@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/login_controller.dart';
-import '../../otp_login/views/otp_login_view.dart';
-import '../../../routes/app_pages.dart';
+import 'package:lms_app/app/modules/login/controllers/login_controller.dart';
+import 'package:lms_app/app/modules/otp_login/views/otp_login_view.dart';
+import 'package:lms_app/app/utils/widgets/custom_loading_button.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -49,7 +49,7 @@ class _LoginViewState extends State<LoginView> {
               const SizedBox(height: 12),
 
               // Email Input
-              TextField(
+              TextFormField(
                 controller: controller.emailController,
                 cursorColor: Colors.grey.shade300,
                 decoration: InputDecoration(
@@ -77,7 +77,7 @@ class _LoginViewState extends State<LoginView> {
               const SizedBox(height: 16),
 
               // Password Input with Eye Toggle
-              TextField(
+              TextFormField(
                 controller: controller.passwordController,
                 obscureText: _obscurePassword,
                 cursorColor: Colors.grey.shade300,
@@ -120,24 +120,11 @@ class _LoginViewState extends State<LoginView> {
               // Login Button
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Navigate to home view after successful login
-                    Get.offAllNamed(Routes.HOME);
+                child: CustomLoadingButton(
+                  onPressed: () async {
+                    await controller.loginWithEmailPassword();
                   },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+                  text: 'Login',
                 ),
               ),
 
@@ -146,10 +133,10 @@ class _LoginViewState extends State<LoginView> {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () => Get.to(() => OtpLoginView()),
-                  child: const Text(
+                  child: Text(
                     "Login with Mobile Number",
                     style: TextStyle(
-                      color: Colors.green,
+                      color: Theme.of(Get.context!).colorScheme.primary,
                       fontWeight: FontWeight.w500,
                     ),
                   ),

@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lms_app/app/controllers/api_client_controller.dart';
+import 'package:lms_app/app/routes/app_pages.dart';
 
 class LoginController extends GetxController {
   // Email and Password text controllers
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final hostUrlController = TextEditingController(
+    text: 'http://192.168.1.120:8004',
+  );
+  final emailController = TextEditingController(
+    text: 'mohan.ra@360ithub.co.in',
+  );
+  final passwordController = TextEditingController(
+    text: 'India@123#',
+  );
+
+  final apiClientController = Get.find<ApiClientController>();
 
   // Observable for toggling password visibility
   RxBool obscurePassword = true.obs;
@@ -13,9 +24,9 @@ class LoginController extends GetxController {
   final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$');
 
   // Login action
-  void login() {
+  Future loginWithEmailPassword() async {
     final email = emailController.text.trim();
-    final password = passwordController.text;
+    final password = passwordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
       Get.snackbar("Error", "Email and password cannot be empty",
@@ -29,12 +40,10 @@ class LoginController extends GetxController {
       return;
     }
 
-    // 🚀 Add your API call or auth logic here
-    print("Logging in with: $email / $password");
+    final success = await apiClientController.loginWithEmailPassword(
+        hostUrlController.text, email, password);
 
-    // Simulate success
-    Get.snackbar("Success", "Logged in successfully!",
-        snackPosition: SnackPosition.BOTTOM);
+    if (success) Get.offAllNamed(Routes.HOME);
   }
 
   // Clean up controllers
