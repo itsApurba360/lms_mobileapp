@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lms_app/app/models/course.dart';
 import 'package:lms_app/app/routes/app_pages.dart';
 import '../controllers/courses_controller.dart';
 
@@ -8,57 +10,6 @@ class CoursesView extends GetView<CoursesController> {
 
   @override
   Widget build(BuildContext context) {
-    final courseList = [
-      {
-        "image": "assets/images/1.jpg",
-        "title": "Mastering Flutter for Beginners",
-        "rating": 4,
-        "duration": "4 hrs",
-        "price": 999.0,
-        "discounted": 648.0
-      },
-      {
-        "image": "assets/images/2.png",
-        "title": "Advanced React Techniques",
-        "rating": 5,
-        "duration": "6 hrs",
-        "price": 999.0,
-        "discounted": 648.0
-      },
-      {
-        "image": "assets/images/3.png",
-        "title": "Python for Data Science",
-        "rating": 3,
-        "duration": "3 hrs",
-        "price": 999.0,
-        "discounted": null
-      },
-      {
-        "image": "assets/images/4.png",
-        "title": "JavaScript Crash Course",
-        "rating": 4,
-        "duration": "2 hrs",
-        "price": 999.0,
-        "discounted": 648.0
-      },
-      {
-        "image": "assets/images/5.jpg",
-        "title": "Fullstack Web Dev Bootcamp",
-        "rating": 5,
-        "duration": "8 hrs",
-        "price": 999.0,
-        "discounted": 648.0
-      },
-      {
-        "image": "assets/images/6.jpg",
-        "title": "Cloud Computing Essentials",
-        "rating": 4,
-        "duration": "5 hrs",
-        "price": 999.0,
-        "discounted": null
-      },
-    ];
-
     return Container(
       color: Color.fromARGB(255, 244, 244, 244),
       child: Scaffold(
@@ -74,23 +25,33 @@ class CoursesView extends GetView<CoursesController> {
             _iconBtn(context, Icons.tune, _showFilterBottomSheet, rightPad: 10),
           ],
         ),
-        body: ListView.builder(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          itemCount: courseList.length,
-          itemBuilder: (_, i) => GestureDetector(
-            onTap: () => Get.toNamed(
-              Routes.COURSE_DETAILS,
-              arguments: {'id': courseList[i]['id'], 'course': courseList[i]},
+        body: controller.obx(
+          (state) => RefreshIndicator(
+            onRefresh: controller.getCourseList,
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              itemCount: controller.coursesList.length,
+              itemBuilder: (_, i) => GestureDetector(
+                onTap: () => Get.toNamed(
+                  Routes.COURSE_DETAILS,
+                  arguments: {
+                    'id': controller.coursesList[i].name,
+                    'course': controller.coursesList[i]
+                  },
+                ),
+                child: _courseCard(controller.coursesList[i]),
+              ),
             ),
-            child: _courseCard(courseList[i]),
           ),
+          onEmpty: const Center(child: Text('No courses found')),
         ),
       ),
     );
   }
 
-  Widget _courseCard(Map<String, dynamic> course) {
-    final hasDiscount = course["discounted"] != null;
+  Widget _courseCard(Course course) {
+    final hasDiscount =
+        course.customDiscount != null && course.customDiscount! > 0;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -112,12 +73,20 @@ class CoursesView extends GetView<CoursesController> {
                   children: [
                     AspectRatio(
                       aspectRatio: 1,
-                      child: Image.asset(
-                        course["image"],
+                      child: CachedNetworkImage(
+                        imageUrl: controller.apiClientController.hostUrl! +
+                            course.image!,
                         fit: BoxFit.cover,
                         alignment: Alignment.center,
                         width: double.infinity,
                         height: double.infinity,
+                        placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        errorWidget: (context, url, error) => const Icon(
+                          Icons.error,
+                          color: Colors.red,
+                        ),
                       ),
                     ),
                     if (hasDiscount)
@@ -131,11 +100,13 @@ class CoursesView extends GetView<CoursesController> {
                             color: Colors.redAccent,
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: const Text('40% Off',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold)),
+                          child: Text(
+                            '${course.customDiscount!.toStringAsFixed(0)}% Off',
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                   ],
@@ -152,7 +123,7 @@ class CoursesView extends GetView<CoursesController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    course["title"],
+                    course.title!,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
@@ -163,7 +134,9 @@ class CoursesView extends GetView<CoursesController> {
                     children: List.generate(
                       5,
                       (i) => Icon(
-                        i < course["rating"] ? Icons.star : Icons.star_border,
+                        i < course.rating!.toInt()
+                            ? Icons.star
+                            : Icons.star_border,
                         size: 14,
                         color: Colors.orange,
                       ),
@@ -175,19 +148,19 @@ class CoursesView extends GetView<CoursesController> {
                       const Icon(Icons.access_time,
                           size: 14, color: Colors.grey),
                       const SizedBox(width: 4),
-                      Text(course["duration"],
+                      Text(course.customCourseDuration.toString(),
                           style: const TextStyle(
                               fontSize: 14, color: Colors.grey)),
                       const Spacer(),
                       if (hasDiscount)
-                        Text('₹${course["price"].toStringAsFixed(0)}',
+                        Text('₹${course.coursePrice!.toStringAsFixed(0)}',
                             style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey,
                                 decoration: TextDecoration.lineThrough)),
                       if (hasDiscount) const SizedBox(width: 6),
                       Text(
-                          '\₹${(course["discounted"] ?? course["price"]).toStringAsFixed(2)}',
+                          '₹${(controller.getCoursePrice(course)).toStringAsFixed(2)}',
                           style: TextStyle(
                               fontSize: 14,
                               color: hasDiscount ? Colors.red : Colors.green,

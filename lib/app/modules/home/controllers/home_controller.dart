@@ -1,11 +1,17 @@
 import 'package:get/get.dart';
+import 'package:lms_app/app/controllers/api_client_controller.dart';
 
 class HomeController extends GetxController {
-  //TODO: Implement HomeController
+  
+  final _apiClientController = Get.find<ApiClientController>();
 
-  final count = 0.obs;
+  // Get homepage data
+  // Future<void> getHomepageData() async {
+  //   try {
+  //     await _apiClientController.post('');
+  //   } catch (e) {
+  //     Get.snackbar('Error', e.toString());
+  //   }
+  // }
 
-
-
-  void increment() => count.value++;
 }

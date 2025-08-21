@@ -8,6 +8,7 @@ import 'app/routes/app_pages.dart';
 void main() {
   runApp(
     GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "Application",
       initialRoute: AppPages.INITIAL,
       initialBinding: BindingsBuilder(
@@ -15,6 +16,14 @@ void main() {
           Get.put(ApiClientController(), permanent: true);
         },
       ),
+      theme: ThemeData(
+          // leading: IconButton(
+          //   icon: const Icon(Icons.menu_open),
+          //   onPressed: () {
+          //     Scaffold.of(context).openDrawer();
+          //   },
+          // ),
+          ),
       getPages: AppPages.routes,
     ),
   );

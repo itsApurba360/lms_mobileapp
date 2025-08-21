@@ -17,15 +17,6 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  void _openDrawer() {
-    if (_scaffoldKey.currentState != null) {
-      _scaffoldKey.currentState!.openDrawer();
-    } else {
-      // Fallback if the drawer can't be opened directly
-      Scaffold.of(context).openDrawer();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final HomeController controller = Get.find<HomeController>();
@@ -50,14 +41,6 @@ class _HomeViewState extends State<HomeView> {
       key: _scaffoldKey,
       drawer: const MenuDrawer(),
       appBar: AppBar(
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: const Icon(Icons.menu_open),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-          ),
-        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_none_outlined),
