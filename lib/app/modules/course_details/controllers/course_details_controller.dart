@@ -2,14 +2,17 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:lms_app/app/models/course.dart';
+import 'package:lms_app/app/modules/courses/controllers/courses_controller.dart';
 import 'package:lms_app/app/utils/helpers.dart';
 import 'package:omni_video_player/omni_video_player.dart';
 
 class CourseDetailsController extends GetxController with StateMixin {
-  late OmniPlaybackController playbackController;
   final globalPlaybackController = GlobalPlaybackController();
   final course = Course().obs;
   final RxBool loadPlayer = false.obs;
+  final RxBool hasDiscount = false.obs;
+
+  final coursesController = Get.find<CoursesController>();
 
   @override
   void onInit() {
@@ -17,8 +20,12 @@ class CourseDetailsController extends GetxController with StateMixin {
     super.onInit();
     course.value = Get.arguments['course'];
     log(getYouTubeThumbnail(course.value.videoLink), name: 'thumbnail');
+    hasDiscount.value =
+        course.value.customDiscount != null && course.value.customDiscount! > 0;
     change(null, status: RxStatus.success());
   }
+
+
 
 
   /// Returns a sanitized YouTube watch URL built from the API's videoLink.

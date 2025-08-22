@@ -153,14 +153,14 @@ class CoursesView extends GetView<CoursesController> {
                               fontSize: 14, color: Colors.grey)),
                       const Spacer(),
                       if (hasDiscount)
-                        Text('₹${course.coursePrice!.toStringAsFixed(0)}',
+                        Text(course.coursePrice!.toStringAsFixed(0),
                             style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey,
                                 decoration: TextDecoration.lineThrough)),
                       if (hasDiscount) const SizedBox(width: 6),
                       Text(
-                          '₹${(controller.getCoursePrice(course)).toStringAsFixed(2)}',
+                          (controller.getCoursePrice(course)),
                           style: TextStyle(
                               fontSize: 14,
                               color: hasDiscount ? Colors.red : Colors.green,

@@ -31,11 +31,11 @@ class CoursesController extends GetxController with StateMixin {
   }
 
   // Get course price
-  getCoursePrice(Course course) {
+  String getCoursePrice(Course course) {
     if (course.customDiscount != null && course.customDiscount! > 0) {
-      return course.customDiscountedPrice;
+      return '${course.customDiscountedPrice?.toStringAsFixed(2) ?? '0'} ₹';
     } else {
-      return course.coursePrice;
+      return '${course.coursePrice?.toStringAsFixed(2) ?? '0'} ₹';
     }
   }
 }

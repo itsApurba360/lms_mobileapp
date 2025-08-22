@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lms_app/app/modules/course_details/controllers/course_details_controller.dart';
@@ -60,59 +61,12 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                                   return OmniVideoPlayer(
                                     callbacks: VideoPlayerCallbacks(
                                       onControllerCreated: (playerController) {
-                                        controller.playbackController =
-                                            playerController;
-                                        // Try to start playback immediately
                                         try {
                                           playerController.play();
                                         } catch (_) {}
                                       },
                                     ),
-                                    options: VideoPlayerConfiguration(
-                                      globalPlaybackControlSettings:
-                                          GlobalPlaybackControlSettings(
-                                        useGlobalPlaybackController: false,
-                                      ),
-                                      videoSourceConfiguration:
-                                          VideoSourceConfiguration.youtube(
-                                        enableYoutubeWebViewFallback: true,
-                                        videoUrl: controller.youtubeUri ??
-                                            Uri.parse(
-                                                'https://www.youtube.com/watch?v='),
-                                        forceYoutubeWebViewOnly: true,
-                                        preferredQualities: [
-                                          OmniVideoQuality.high720,
-                                          OmniVideoQuality.low144,
-                                        ],
-                                        availableQualities: [
-                                          OmniVideoQuality.high1080,
-                                          OmniVideoQuality.high720,
-                                          OmniVideoQuality.low144,
-                                        ],
-                                      ),
-                                      playerTheme:
-                                          OmniVideoPlayerThemeData().copyWith(
-                                        icons: VideoPlayerIconTheme()
-                                            .copyWith(error: Icons.warning),
-                                        overlays:
-                                            VideoPlayerOverlayTheme().copyWith(
-                                          backgroundColor: Colors.transparent,
-                                          alpha: 0,
-                                        ),
-                                      ),
-                                      playerUIVisibilityOptions:
-                                          PlayerUIVisibilityOptions(
-                                        showMuteUnMuteButton: true,
-                                        showFullScreenButton: true,
-                                        useSafeAreaForBottomControls: true,
-                                        showErrorPlaceholder: false,
-                                        showThumbnailAtStart: false,
-                                      ),
-                                      customPlayerWidgets:
-                                          CustomPlayerWidgets().copyWith(
-                                        thumbnailFit: BoxFit.cover,
-                                      ),
-                                    ),
+                                    options: videoPlayerConfig(),
                                   );
                                 }
 
@@ -132,10 +86,10 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                                     children: [
                                       // Thumbnail image
                                       if (thumbUrl.isNotEmpty)
-                                        Image.network(
-                                          thumbUrl,
+                                        CachedNetworkImage(
+                                          imageUrl: thumbUrl,
                                           fit: BoxFit.cover,
-                                          errorBuilder: (_, __, ___) =>
+                                          errorWidget: (_, __, ___) =>
                                               Container(color: Colors.black12),
                                         )
                                       else
@@ -197,17 +151,20 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 8),
                       child: Row(
-                        children: const [
-                          Text("₹499",
+                          children: [
+                            Text(
+                                controller.coursesController
+                                    .getCoursePrice(controller.course.value),
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold)),
                           SizedBox(width: 8),
-                          Text(
-                            "₹999",
-                            style: TextStyle(
-                                color: Colors.grey,
-                                decoration: TextDecoration.lineThrough),
-                          ),
+                            if (controller.hasDiscount.value)
+                              Text(
+                                "₹999",
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    decoration: TextDecoration.lineThrough),
+                              ),
                             ],                                                   
                       ),
                     ),
@@ -546,6 +503,46 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  VideoPlayerConfiguration videoPlayerConfig() {
+    return VideoPlayerConfiguration(
+      globalPlaybackControlSettings: GlobalPlaybackControlSettings(
+        useGlobalPlaybackController: false,
+      ),
+      videoSourceConfiguration: VideoSourceConfiguration.youtube(
+        enableYoutubeWebViewFallback: true,
+        videoUrl: controller.youtubeUri ??
+            Uri.parse('https://www.youtube.com/watch?v='),
+        forceYoutubeWebViewOnly: true,
+        preferredQualities: [
+          OmniVideoQuality.high720,
+          OmniVideoQuality.low144,
+        ],
+        availableQualities: [
+          OmniVideoQuality.high1080,
+          OmniVideoQuality.high720,
+          OmniVideoQuality.low144,
+        ],
+      ),
+      playerTheme: OmniVideoPlayerThemeData().copyWith(
+        icons: VideoPlayerIconTheme().copyWith(error: Icons.warning),
+        overlays: VideoPlayerOverlayTheme().copyWith(
+          backgroundColor: Colors.transparent,
+          alpha: 0,
+        ),
+      ),
+      playerUIVisibilityOptions: PlayerUIVisibilityOptions(
+        showMuteUnMuteButton: true,
+        showFullScreenButton: true,
+        useSafeAreaForBottomControls: true,
+        showErrorPlaceholder: false,
+        showThumbnailAtStart: false,
+      ),
+      customPlayerWidgets: CustomPlayerWidgets().copyWith(
+        thumbnailFit: BoxFit.cover,
       ),
     );
   }
