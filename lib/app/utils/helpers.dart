@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 /// Builds a sanitized YouTube watch URL (https://www.youtube.com/watch?v=ID)
 /// from various possible inputs:
 /// - Raw video ID (optionally with query like `?si=...`)
@@ -56,4 +58,19 @@ Uri? buildYouTubeWatchUri(String? raw) {
   if (id.isEmpty) return null;
 
   return Uri.https('www.youtube.com', '/watch', {'v': id});
+}
+
+String? extractYouTubeId(String? raw) {
+  final uri = buildYouTubeWatchUri(raw);
+  if (uri == null) return null;
+  final id = uri.queryParameters['v'];
+  if (id == null || id.isEmpty) return null;
+  return id;
+}
+
+// Get youtube thumbnail image from url
+String getYouTubeThumbnail(String? url) {
+  final id = extractYouTubeId(url);
+  if (id == null) return "";
+  return 'https://i.ytimg.com/vi/$id/hqdefault.jpg';
 }

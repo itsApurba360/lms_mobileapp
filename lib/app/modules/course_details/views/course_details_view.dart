@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lms_app/app/modules/course_details/controllers/course_details_controller.dart';
+import 'package:lms_app/app/utils/helpers.dart';
 import 'package:omni_video_player/omni_video_player.dart';
 
 class CourseDetailsView extends GetView<CourseDetailsController> {
@@ -14,25 +15,12 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
     // if (isChapterExpanded.length != chapters.length) {
     //   isChapterExpanded = List.generate(chapters.length, (index) => false);
     // }
-
     return Scaffold(
         // backgroundColor: bodyGrey,
       appBar: AppBar(
-        automaticallyImplyLeading: false, // prevent default back arrow
-        titleSpacing: 0, // make sure title starts from the left
-        title: Row(
-          children: [
-            IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            const Text(
-              'Course Details',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-            ),
-          ],
+        title: const Text(
+          'Course Details',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
         ),
         actions: [
           IconButton(
@@ -48,47 +36,6 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
             },
           ),
         ],
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(12),
-        color: Colors.white,
-        child: Row(
-          children: [
-            Expanded(
-              flex: 3,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: const Text(
-                  "₹4999",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black87,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              flex: 7,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  minimumSize: const Size.fromHeight(50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  elevation: 0,
-                ),
-                child: const Text(
-                  "Buy Now",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
         body: controller.obx(
           (state) => DefaultTabController(
@@ -108,52 +55,108 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                               width: double.infinity,
                               child: AspectRatio(
                                 aspectRatio: 16 / 9,
-                                child: OmniVideoPlayer(
-                                  callbacks: VideoPlayerCallbacks(
-                                    onControllerCreated: (playerController) {
-                                      controller.playbackController =
-                                          playerController;
-                                    },
-                                  ),
-                                  options: VideoPlayerConfiguration(
-                                    videoSourceConfiguration:
-                                        VideoSourceConfiguration.youtube(
-                                      videoUrl: controller.youtubeUri ??
-                                          Uri.parse(
-                                              'https://www.youtube.com/watch?v='),
-                                      preferredQualities: [
-                                        OmniVideoQuality.high720,
-                                        OmniVideoQuality.low144,
-                                      ],
-                                      availableQualities: [
-                                        OmniVideoQuality.high1080,
-                                        OmniVideoQuality.high720,
-                                        OmniVideoQuality.low144,
-                                      ],
+                              child: Obx(() {
+                                if (controller.loadPlayer.value) {
+                                  return OmniVideoPlayer(
+                                    callbacks: VideoPlayerCallbacks(
+                                      onControllerCreated: (playerController) {
+                                        controller.playbackController =
+                                            playerController;
+                                        // Try to start playback immediately
+                                        try {
+                                          playerController.play();
+                                        } catch (_) {}
+                                      },
                                     ),
-                                    playerTheme:
-                                        OmniVideoPlayerThemeData().copyWith(
-                                      icons: VideoPlayerIconTheme()
-                                          .copyWith(error: Icons.warning),
-                                      overlays:
-                                          VideoPlayerOverlayTheme().copyWith(
-                                        backgroundColor: Colors.transparent,
-                                        alpha: 0,
+                                    options: VideoPlayerConfiguration(
+                                      globalPlaybackControlSettings:
+                                          GlobalPlaybackControlSettings(
+                                        useGlobalPlaybackController: false,
+                                      ),
+                                      videoSourceConfiguration:
+                                          VideoSourceConfiguration.youtube(
+                                        enableYoutubeWebViewFallback: true,
+                                        videoUrl: controller.youtubeUri ??
+                                            Uri.parse(
+                                                'https://www.youtube.com/watch?v='),
+                                        forceYoutubeWebViewOnly: true,
+                                        preferredQualities: [
+                                          OmniVideoQuality.high720,
+                                          OmniVideoQuality.low144,
+                                        ],
+                                        availableQualities: [
+                                          OmniVideoQuality.high1080,
+                                          OmniVideoQuality.high720,
+                                          OmniVideoQuality.low144,
+                                        ],
+                                      ),
+                                      playerTheme:
+                                          OmniVideoPlayerThemeData().copyWith(
+                                        icons: VideoPlayerIconTheme()
+                                            .copyWith(error: Icons.warning),
+                                        overlays:
+                                            VideoPlayerOverlayTheme().copyWith(
+                                          backgroundColor: Colors.transparent,
+                                          alpha: 0,
+                                        ),
+                                      ),
+                                      playerUIVisibilityOptions:
+                                          PlayerUIVisibilityOptions(
+                                        showMuteUnMuteButton: true,
+                                        showFullScreenButton: true,
+                                        useSafeAreaForBottomControls: true,
+                                        showErrorPlaceholder: false,
+                                        showThumbnailAtStart: false,
+                                      ),
+                                      customPlayerWidgets:
+                                          CustomPlayerWidgets().copyWith(
+                                        thumbnailFit: BoxFit.cover,
                                       ),
                                     ),
-                                    playerUIVisibilityOptions:
-                                        PlayerUIVisibilityOptions().copyWith(
-                                      showMuteUnMuteButton: true,
-                                      showFullScreenButton: true,
-                                      useSafeAreaForBottomControls: true,
-                                      showErrorPlaceholder: false,
-                                    ),
-                                    customPlayerWidgets:
-                                        CustomPlayerWidgets().copyWith(
-                                      thumbnailFit: BoxFit.cover,
-                                    ),
+                                  );
+                                }
+
+                                final thumbUrl = getYouTubeThumbnail(
+                                    controller.course.value.videoLink);
+                                return InkWell(
+                                  onTap: () {
+                                    if (controller.youtubeUri != null) {
+                                      controller.loadPlayer.value = true;
+                                    } else {
+                                      Get.snackbar('Video unavailable',
+                                          'Invalid or missing YouTube link');
+                                    }
+                                  },
+                                  child: Stack(
+                                    fit: StackFit.expand,
+                                    children: [
+                                      // Thumbnail image
+                                      if (thumbUrl.isNotEmpty)
+                                        Image.network(
+                                          thumbUrl,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (_, __, ___) =>
+                                              Container(color: Colors.black12),
+                                        )
+                                      else
+                                        Container(color: Colors.black12),
+                                      // Play button overlay
+                                      Center(
+                                        child: Container(
+                                          width: 64,
+                                          height: 64,
+                                          decoration: BoxDecoration(
+                                            color: Colors.black54,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: const Icon(Icons.play_arrow,
+                                              color: Colors.white, size: 36),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
+                                );
+                              }),
                               ),
                             ),
                           ),
@@ -502,6 +505,48 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
               ),
             ),
       ),
-        ));
+      ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(12),
+        color: Colors.white,
+        child: Row(
+          children: [
+            Expanded(
+              flex: 3,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: const Text(
+                  "₹4999",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              flex: 7,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  minimumSize: const Size.fromHeight(50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  elevation: 0,
+                ),
+                child: const Text(
+                  "Buy Now",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
