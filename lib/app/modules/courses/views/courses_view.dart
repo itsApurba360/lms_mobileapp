@@ -15,10 +15,6 @@ class CoursesView extends GetView<CoursesController> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new),
-            onPressed: () => Get.back(),
-          ),
           title: const Text('Courses'),
           actions: [
             _iconBtn(context, Icons.import_export, _showSortBottomSheet),

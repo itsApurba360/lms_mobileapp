@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:lms_app/app/modules/course_details/controllers/course_details_controller.dart';
 import 'package:lms_app/app/utils/helpers.dart';
@@ -209,16 +210,74 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
               ),
             ];
           },
-          body: TabBarView(
-            children: [
-                  SizedBox(),
-                  SizedBox(),
-                  SizedBox(),
-              // TAB 1: Info Tab
-                  // _buildInfoTab(),
+            body: TabBarView(
+              children: [
+                // TAB 1: Info Tab
+                SingleChildScrollView(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  child: Html(
+                    data: controller.course.value.description,
+                    style: {
+                      'body': Style(
+                        margin: Margins.zero,
+                        padding: HtmlPaddings.zero,
+                        color: Colors.black87,
+                        lineHeight: LineHeight.number(1.5),
+                        fontSize: FontSize(15.0),
+                      ),
+                      'p': Style(
+                        margin: Margins.only(bottom: 8),
+                        padding: HtmlPaddings.zero,
+                      ),
+                      'span': Style(
+                        margin: Margins.zero,
+                        padding: HtmlPaddings.zero,
+                      ),
+                      'strong': Style(fontWeight: FontWeight.w600),
+                      'b': Style(fontWeight: FontWeight.w600),
+                      'em': Style(fontStyle: FontStyle.italic),
+                      'ul': Style(
+                        margin: Margins.only(top: 4, bottom: 8, left: 16),
+                        padding: HtmlPaddings.zero,
+                        listStylePosition: ListStylePosition.outside,
+                      ),
+                      'ol': Style(
+                        margin: Margins.only(top: 4, bottom: 8, left: 16),
+                        padding: HtmlPaddings.zero,
+                        listStylePosition: ListStylePosition.outside,
+                      ),
+                      'li': Style(
+                        margin: Margins.only(bottom: 4),
+                        padding: HtmlPaddings.zero,
+                      ),
+                      'h1': Style(
+                          margin: Margins.only(bottom: 8),
+                          fontSize: FontSize(22.0),
+                          fontWeight: FontWeight.w700),
+                      'h2': Style(
+                          margin: Margins.only(bottom: 8),
+                          fontSize: FontSize(20.0),
+                          fontWeight: FontWeight.w700),
+                      'h3': Style(
+                          margin: Margins.only(bottom: 6),
+                          fontSize: FontSize(18.0),
+                          fontWeight: FontWeight.w700),
+                    },
+                  ),
+                ),
+                SizedBox(),
+                SizedBox(),
 
-              // TAB 2: Chapters Tab (with RangeError fix)
-                  // ListView.builder(
+                // TAB 2: Chapters Tab (with RangeError fix)
+                // ListView.builder(
+                //   padding: const EdgeInsets.all(16),
+                //   itemCount: chapters.length,
+                //   itemBuilder: (context, chapterIndex) {
+                //     final chapter = chapters[chapterIndex];
+                //     final lessons = chapter['lessons'] as List<dynamic>;
+                //     final bool isExpanded =
+                //         isChapterExpanded[chapterIndex] == true;
                   //   padding: const EdgeInsets.all(16),
                   //   itemCount: chapters.length,
                   //   itemBuilder: (context, chapterIndex) {
