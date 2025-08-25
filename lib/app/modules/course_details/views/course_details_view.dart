@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:lms_app/app/modules/course_details/controllers/course_details_controller.dart';
 import 'package:lms_app/app/utils/helpers.dart';
 import 'package:omni_video_player/omni_video_player.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class CourseDetailsView extends GetView<CourseDetailsController> {
   const CourseDetailsView({super.key});
@@ -59,15 +60,30 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                                 aspectRatio: 16 / 9,
                               child: Obx(() {
                                 if (controller.loadPlayer.value) {
-                                  return OmniVideoPlayer(
-                                    callbacks: VideoPlayerCallbacks(
-                                      onControllerCreated: (playerController) {
-                                        try {
-                                          playerController.play();
-                                        } catch (_) {}
-                                      },
+                                  return VisibilityDetector(
+                                    key: const Key('video-player-visibility'),
+                                    onVisibilityChanged: (visibilityInfo) {
+                                      controller
+                                          .onVisibilityChanged(visibilityInfo);
+                                    },
+                                    child: OmniVideoPlayer(
+                                      callbacks: VideoPlayerCallbacks(
+                                        onControllerCreated:
+                                            (playerController) {
+                                          controller.videoPlaybackController
+                                              .setController(playerController);
+
+                                          // if the widget is visible to the screen it should start playing
+                                          if (controller
+                                              .isPlayerVisible.value) {
+                                            controller.videoPlaybackController
+                                                .omniVideoPlaybackController
+                                                .play();
+                                          }
+                                        },
+                                      ),
+                                      options: videoPlayerConfig(),
                                     ),
-                                    options: videoPlayerConfig(),
                                   );
                                 }
 

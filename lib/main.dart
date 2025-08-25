@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:lms_app/app/controllers/api_client_controller.dart';
+import 'package:lms_app/app/controllers/video_playback_controller.dart';
 
 import 'app/routes/app_pages.dart';
 
@@ -14,6 +15,7 @@ void main() {
       initialBinding: BindingsBuilder(
         () {
           Get.put(ApiClientController(), permanent: true);
+          Get.put(VideoPlaybackController(), permanent: true);
         },
       ),
       theme: ThemeData(

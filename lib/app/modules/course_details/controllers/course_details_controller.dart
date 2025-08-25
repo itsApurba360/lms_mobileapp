@@ -1,16 +1,21 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:lms_app/app/controllers/video_playback_controller.dart';
 import 'package:lms_app/app/models/course.dart';
 import 'package:lms_app/app/modules/courses/controllers/courses_controller.dart';
 import 'package:lms_app/app/utils/helpers.dart';
 import 'package:omni_video_player/omni_video_player.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class CourseDetailsController extends GetxController with StateMixin {
   final globalPlaybackController = GlobalPlaybackController();
   final course = Course().obs;
   final RxBool loadPlayer = false.obs;
   final RxBool hasDiscount = false.obs;
+  final RxBool isPlayerVisible = false.obs;
+
+  final videoPlaybackController = Get.find<VideoPlaybackController>();
 
   final coursesController = Get.find<CoursesController>();
 
@@ -25,8 +30,11 @@ class CourseDetailsController extends GetxController with StateMixin {
     change(null, status: RxStatus.success());
   }
 
-
-
+  void onVisibilityChanged(VisibilityInfo info) {
+    log(info.visibleFraction.toString(), name: 'visibleFraction');
+    isPlayerVisible.value = info.visibleFraction > 0.8;
+    log(isPlayerVisible.value.toString(), name: 'isPlayerVisible');
+  }
 
   /// Returns a sanitized YouTube watch URL built from the API's videoLink.
   /// Supports raw IDs (optionally with query like `?si=...`), youtu.be links,
