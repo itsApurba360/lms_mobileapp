@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lms_app/app/controllers/api_client_controller.dart';
 import 'package:lms_app/app/controllers/video_playback_controller.dart';
@@ -21,6 +22,9 @@ class CourseDetailsController extends GetxController with StateMixin {
 
   final RxBool isLessonVideo = false.obs;
 
+  // Key to locate the video player area for scrolling
+  final GlobalKey videoPlayerKey = GlobalKey();
+
 
   final currentLessonDetail = LessonDetail().obs;
 
@@ -39,20 +43,20 @@ class CourseDetailsController extends GetxController with StateMixin {
         course.value.customDiscount != null && course.value.customDiscount! > 0;
     change(null, status: RxStatus.success());
     fetchCourseOutline();
-    fetchCourseResources();
+    // fetchCourseResources();
   }
 
   // Fetch course resources
-  Future<void> fetchCourseResources() async {
-    try {
-      await apiClientController.post(
-        '/api/method/lms_360ithub.api.get_course_resources',
-        data: {'course': course.value.name!},
-      );
-    } catch (e) {
-      Get.snackbar('Error', e.toString());
-    }
-  }
+  // Future<void> fetchCourseResources() async {
+  //   try {
+  //     await apiClientController.post(
+  //       '/api/method/lms_360ithub.api.get_course_resources',
+  //       data: {'course': course.value.name!},
+  //     );
+  //   } catch (e) {
+  //     Get.snackbar('Error', e.toString());
+  //   }
+  // }
 
   // Fetch course outline
   Future<void> fetchCourseOutline() async {
@@ -88,6 +92,19 @@ class CourseDetailsController extends GetxController with StateMixin {
   void playVideo() {
     loadPlayer.value = true;
     isLessonVideo.value = true;
+  }
+
+  // Smoothly scrolls the view to the video player area (top header)
+  void scrollToVideo() {
+    final ctx = videoPlayerKey.currentContext;
+    if (ctx != null) {
+      Scrollable.ensureVisible(
+        ctx,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+        alignment: 0.0,
+      );
+    }
   }
 
   void onVisibilityChanged(VisibilityInfo info) {

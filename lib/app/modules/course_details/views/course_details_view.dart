@@ -52,6 +52,7 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                           child: SizedBox(
                             width: double.infinity,
                             child: AspectRatio(
+                              key: controller.videoPlayerKey,
                               aspectRatio: 16 / 9,
                               child: Obx(() {
                                 if (controller.loadPlayer.value) {
@@ -62,6 +63,18 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                                           .onVisibilityChanged(visibilityInfo);
                                     },
                                     child: OmniVideoPlayer(
+                                      key: ValueKey<String>(
+                                        controller.isLessonVideo.value
+                                            ? 'vimeo-${controller.getVimeoId(
+                                                controller
+                                                    .currentLessonDetail
+                                                    .value
+                                                    .customLessonVideos
+                                                    ?.first
+                                                    .videoLink,
+                                              )}'
+                                            : 'yt-${controller.youtubeUri?.toString() ?? ''}',
+                                      ),
                                       callbacks: VideoPlayerCallbacks(
                                         onControllerCreated:
                                             (playerController) {
@@ -157,30 +170,30 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        child: Row(
-                          children: [
-                            Text(
-                                controller.coursesController
-                                    .getCoursePrice(controller.course.value),
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold)),
-                            SizedBox(width: 8),
-                            if (controller.hasDiscount.value)
-                              Text(
-                                controller.course.value.coursePrice
-                                        ?.toInt()
-                                        .toString() ??
-                                    '0',
-                                style: TextStyle(
-                                    color: Colors.grey,
-                                    decoration: TextDecoration.lineThrough),
-                              ),
-                          ],
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(
+                      //       horizontal: 16, vertical: 8),
+                      //   child: Row(
+                      //     children: [
+                      //       Text(
+                      //           controller.coursesController
+                      //               .getCoursePrice(controller.course.value),
+                      //           style: TextStyle(
+                      //               fontSize: 20, fontWeight: FontWeight.bold)),
+                      //       SizedBox(width: 8),
+                      //       if (controller.hasDiscount.value)
+                      //         Text(
+                      //           controller.course.value.coursePrice
+                      //                   ?.toInt()
+                      //                   .toString() ??
+                      //               '0',
+                      //           style: TextStyle(
+                      //               color: Colors.grey,
+                      //               decoration: TextDecoration.lineThrough),
+                      //         ),
+                      //     ],
+                      //   ),
+                      // ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Row(
@@ -206,7 +219,7 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 8),
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16),
                         child: TabBar(
@@ -367,10 +380,12 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                                       onPressed: (!isPlayable || isPlaying)
                                           ? null
                                           : () {
+                                                controller.scrollToVideo();
                                               controller.playLesson(lesson);
                                             },
                                     );
-                                  }),
+                                    },
+                                  ),
                                 ),
                               );
                             },

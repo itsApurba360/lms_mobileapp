@@ -9,8 +9,11 @@ class VideoPlaybackController extends GetxController {
   }
 
   void clearController() {
-    if (omniVideoPlaybackController != null && omniVideoPlaybackController?.isBlank != true) {
-      omniVideoPlaybackController?.dispose();
-    }
+    // Do NOT manually dispose the controller here. The OmniVideoPlayer widget
+    // manages the lifecycle of its internal controller in its own State.
+    // Disposing it while the widget subtree is still updating can cause
+    // "used after being disposed" assertions in listeners.
+    // Simply drop our reference; when the widget unmounts, it will dispose.
+    omniVideoPlaybackController = null;
   }
 }
