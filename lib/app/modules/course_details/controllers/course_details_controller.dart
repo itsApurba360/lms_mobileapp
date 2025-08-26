@@ -25,7 +25,6 @@ class CourseDetailsController extends GetxController with StateMixin {
   // Key to locate the video player area for scrolling
   final GlobalKey videoPlayerKey = GlobalKey();
 
-
   final currentLessonDetail = LessonDetail().obs;
 
   final videoPlaybackController = Get.find<VideoPlaybackController>();
@@ -132,6 +131,7 @@ class CourseDetailsController extends GetxController with StateMixin {
     log(uri.toString(), name: 'youtubeUrl');
     return uri;
   }
+
   String getVimeoId(String? raw) {
     if (raw == null || raw.trim().isEmpty) {
       log('No videoLink provided', name: 'vimeoId');
@@ -161,5 +161,4 @@ class CourseDetailsController extends GetxController with StateMixin {
     log(id, name: 'vimeoId');
     return id;
   }
-
 }

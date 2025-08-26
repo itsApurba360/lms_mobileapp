@@ -18,7 +18,9 @@ class CoursesController extends GetxController with StateMixin {
   // Get course list
   Future<void> getCourseList() async {
     try {
-      final response = await apiClientController.getList('LMS Course');
+      final response = await apiClientController.post(
+          '/api/method/lms_360ithub.utils.custom_lms.get_courses',
+          data: {});
 
       coursesList.value = CourseResponse.fromJson(response.data).message ?? [];
 

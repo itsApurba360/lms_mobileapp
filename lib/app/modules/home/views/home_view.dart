@@ -246,7 +246,7 @@ class _HomeViewState extends State<HomeView> {
           ),
           GestureDetector(
             onTap: () {
-              Get.toNamed(Routes.PURCHASES);
+              // Get.toNamed(Routes.PURCHASES);
             },
             child: iconTile(Icons.play_circle_fill, 'My Puchases',
                 Color(0xFFFFE6E6), Color.fromARGB(255, 255, 168, 168)),
