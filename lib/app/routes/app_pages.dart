@@ -34,6 +34,7 @@ import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/settings/views/settings_view.dart';
 import '../modules/testseries/bindings/testseries_binding.dart';
 import '../modules/testseries/views/testseries_view.dart';
+import '../middleware/auth_middleware.dart';
 
 part 'app_routes.dart';
 
@@ -112,11 +113,13 @@ class AppPages {
       name: _Paths.LOGIN,
       page: () => const LoginView(),
       binding: LoginBinding(),
+      middlewares: [RedirectAuthenticatedToHome()],
     ),
     GetPage(
       name: _Paths.OTP_LOGIN,
       page: () => OtpLoginView(),
       binding: OtpLoginBinding(),
+      middlewares: [RedirectAuthenticatedToHome()],
     ),
     GetPage(
       name: _Paths.PURCHASES,
