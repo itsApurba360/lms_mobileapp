@@ -37,11 +37,24 @@ class CourseDetailsController extends GetxController with StateMixin {
     hasDiscount.value =
         course.value.customDiscount != null && course.value.customDiscount! > 0;
     change(null, status: RxStatus.success());
-    fetchCourseDetails();
+    fetchCourseOutline();
+    fetchCourseResources();
+  }
+
+  // Fetch course resources
+  Future<void> fetchCourseResources() async {
+    try {
+      await apiClientController.post(
+        '/api/method/lms_360ithub.api.get_course_resources',
+        data: {'course': course.value.name!},
+      );
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
   }
 
   // Fetch course outline
-  Future<void> fetchCourseDetails() async {
+  Future<void> fetchCourseOutline() async {
     try {
       final response = await apiClientController.post(
         '/api/method/lms.lms.utils.get_course_outline',
@@ -55,7 +68,6 @@ class CourseDetailsController extends GetxController with StateMixin {
   }
 
   playLesson(Lesson lesson) async {
-    // Get video link from API
     try {
       final response = await apiClientController.post(
         '/api/method/lms_360ithub.api.get_lesson_details',

@@ -35,9 +35,9 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
         ],
       ),
       body: DefaultTabController(
-        length: 3,
+        length: 2,
         child: RefreshIndicator(
-          onRefresh: () => controller.fetchCourseDetails(),
+          onRefresh: () => controller.fetchCourseOutline(),
           child: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
@@ -214,7 +214,7 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                           tabs: [
                             Tab(text: "Info"),
                             Tab(text: "Chapters"),
-                            Tab(text: "Resources"),
+                            // Tab(text: "Resources"),
                           ],
                         ),
                       ),
@@ -228,88 +228,9 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                 // TAB 1: Info Tab
                 _buildInfoTab(),
                 // TAB 2: Chapters Tab
-                Obx(
-                  () => controller.courseOutline.isEmpty
-                      ? const Center(child: Text('No chapters found'))
-                      : ListView.builder(
-                          padding: EdgeInsets.fromLTRB(
-                              16, 16, 16, kBottomNavigationBarHeight + 24),
-                          itemCount: controller.courseOutline.length,
-                          itemBuilder: (context, chapterIndex) {
-                            final chapter =
-                                controller.courseOutline[chapterIndex];
-                            final lessons = chapter.lessons;
-                            return GestureDetector(
-                              child: Container(
-                                margin: const EdgeInsets.only(bottom: 12),
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(12),
-                                  border:
-                                      Border.all(color: Colors.grey.shade200),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          chapter.title ?? '',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 8),
-                                    if (lessons != null && lessons.isNotEmpty)
-                                      ListView.builder(
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemCount: lessons.length,
-                                        itemBuilder: (context, lessonIndex) {
-                                          final lesson = lessons[lessonIndex];
-                                          return ListTile(
-                                            visualDensity:
-                                                VisualDensity.compact,
-                                            enabled: true,
-                                            title: Text(lesson.title ?? ''),
-                                            subtitle: lesson.body != null
-                                                ? Text(lesson.body ?? '')
-                                                : null,
-                                            trailing: IconButton(
-                                              visualDensity:
-                                                  VisualDensity.compact,
-                                              icon: Icon(
-                                                lesson.includeInPreview == 1
-                                                    ? Icons.play_arrow
-                                                    : Icons.lock,
-                                                color:
-                                                    lesson.includeInPreview == 1
-                                                        ? Colors.green
-                                                        : Colors.grey,
-                                              ),
-                                              onPressed: () {
-                                                if (lesson.includeInPreview ==
-                                                    1) {
-                                                  controller.playLesson(lesson);
-                                                }
-                                              },
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                ),
+                _buildChaptersTab(),
                 // TAB 3: Resources Tab (placeholder)
-                const SizedBox(),
+                // const SizedBox(),
               ],
             ),
           ),
@@ -359,6 +280,81 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
           ),
         ),
       ),
+    );
+  }
+
+  Obx _buildChaptersTab() {
+    return Obx(
+      () => controller.courseOutline.isEmpty
+          ? const Center(child: Text('No chapters found'))
+          : ListView.builder(
+              padding: EdgeInsets.fromLTRB(
+                  16, 16, 16, kBottomNavigationBarHeight + 24),
+              itemCount: controller.courseOutline.length,
+              itemBuilder: (context, chapterIndex) {
+                final chapter = controller.courseOutline[chapterIndex];
+                final lessons = chapter.lessons;
+                return GestureDetector(
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.shade200),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              chapter.title ?? '',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        if (lessons != null && lessons.isNotEmpty)
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: lessons.length,
+                            itemBuilder: (context, lessonIndex) {
+                              final lesson = lessons[lessonIndex];
+                              return ListTile(
+                                visualDensity: VisualDensity.compact,
+                                enabled: true,
+                                title: Text(lesson.title ?? ''),
+                                subtitle: lesson.body != null
+                                    ? Text(lesson.body ?? '')
+                                    : null,
+                                trailing: IconButton(
+                                  visualDensity: VisualDensity.compact,
+                                  icon: Icon(
+                                    lesson.includeInPreview == 1
+                                        ? Icons.play_arrow
+                                        : Icons.lock,
+                                    color: lesson.includeInPreview == 1
+                                        ? Colors.green
+                                        : Colors.grey,
+                                  ),
+                                  onPressed: () {
+                                    if (lesson.includeInPreview == 1) {
+                                      controller.playLesson(lesson);
+                                    }
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
     );
   }
 
