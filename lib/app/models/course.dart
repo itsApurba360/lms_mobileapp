@@ -9,6 +9,18 @@ CourseResponse courseFromJson(String str) =>
 
 String courseToJson(CourseResponse data) => json.encode(data.toJson());
 
+num? _toNum(dynamic value) {
+  if (value == null) return null;
+  if (value is num) return value;
+  if (value is String) {
+    final s = value.trim();
+    if (s.isEmpty) return null;
+    final normalized = s.replaceAll(',', '');
+    return num.tryParse(normalized);
+  }
+  return null;
+}
+
 class CourseResponse {
   List<Course>? message;
 
@@ -156,7 +168,7 @@ class Course {
         amountUsd: json["amount_usd"],
         enrollments: json["enrollments"],
         lessons: json["lessons"],
-        rating: json["rating"],
+        rating: _toNum(json["rating"]),
         userTags: json["_user_tags"],
         comments: json["_comments"],
         assign: json["_assign"],
