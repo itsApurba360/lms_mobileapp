@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lms_app/app/controllers/api_client_controller.dart';
 import 'package:lms_app/app/routes/app_pages.dart';
 
 class MenuDrawer extends StatelessWidget {
@@ -135,11 +136,10 @@ class MenuDrawer extends StatelessWidget {
                     child: const Text('Logout'),
                     onPressed: () {
                       Navigator.of(dialogContext).pop(); // Close dialog
-                      // Navigate to login and clear stack
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                        Routes.LOGIN,
-                        (Route<dynamic> route) => false,
-                      );
+                      Get.find<ApiClientController>().logout();
+
+                      // Navigate to login screen and remove all previous routes
+                      Get.offAllNamed(Routes.LOGIN);
                     },
                   ),
                 ],

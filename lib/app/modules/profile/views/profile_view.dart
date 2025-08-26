@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lms_app/app/controllers/api_client_controller.dart';
 import 'package:lms_app/app/routes/app_pages.dart';
 import '../controllers/profile_controller.dart';
 
@@ -13,7 +14,7 @@ class ProfileView extends GetView<ProfileController> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ProfileView'),
+        title: const Text('Profile'),
         centerTitle: true,
       ),
       backgroundColor: backgroundColor,
@@ -230,12 +231,7 @@ class ProfileView extends GetView<ProfileController> {
                         // Clear any user session data here if needed
                         // For example: await Get.find<AuthController>().logout();
 
-                        // Show logout message
-                        Get.snackbar(
-                          "Logged out",
-                          "You have been logged out successfully.",
-                          snackPosition: SnackPosition.BOTTOM,
-                        );
+                        Get.find<ApiClientController>().logout();
 
                         // Navigate to login screen and remove all previous routes
                         Get.offAllNamed(Routes.LOGIN);

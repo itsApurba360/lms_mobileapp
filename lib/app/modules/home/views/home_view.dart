@@ -45,7 +45,6 @@ class _HomeViewState extends State<HomeView> {
           IconButton(
             icon: const Icon(Icons.notifications_none_outlined),
             onPressed: () {
-              print('Navigating to notifications...');
               Get.to(
                 () => NotificationsView(),
                 binding: NotificationsBinding(),
