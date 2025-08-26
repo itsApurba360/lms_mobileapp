@@ -170,8 +170,10 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                             SizedBox(width: 8),
                             if (controller.hasDiscount.value)
                               Text(
-                                controller.course.value.customDiscountedPrice
-                                    .toString(),
+                                controller.course.value.coursePrice
+                                        ?.toInt()
+                                        .toString() ??
+                                    '0',
                                 style: TextStyle(
                                     color: Colors.grey,
                                     decoration: TextDecoration.lineThrough),
@@ -308,10 +310,14 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                       children: [
                         Row(
                           children: [
-                            Text(
-                              chapter.title ?? '',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            Expanded(
+                              child: AutoSizeText(
+                                chapter.title ?? '',
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ],
                         ),
@@ -325,26 +331,46 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                               final lesson = lessons[lessonIndex];
                               return ListTile(
                                 visualDensity: VisualDensity.compact,
-                                enabled: true,
                                 title: Text(lesson.title ?? ''),
                                 subtitle: lesson.body != null
-                                    ? Text(lesson.body ?? '')
+                                    ? AutoSizeText(
+                                        lesson.body ?? '',
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      )
                                     : null,
-                                trailing: IconButton(
-                                  visualDensity: VisualDensity.compact,
-                                  icon: Icon(
-                                    lesson.includeInPreview == 1
-                                        ? Icons.play_arrow
-                                        : Icons.lock,
-                                    color: lesson.includeInPreview == 1
-                                        ? Colors.green
-                                        : Colors.grey,
-                                  ),
-                                  onPressed: () {
-                                    if (lesson.includeInPreview == 1) {
-                                      controller.playLesson(lesson);
-                                    }
-                                  },
+                                trailing: SizedBox(
+                                  width: 40,
+                                  height: 40,
+                                  child: Obx(() {
+                                    final bool isPlayable =
+                                        (lesson.includeInPreview == 1);
+                                    final String? playingName = controller
+                                        .currentLessonDetail.value.name;
+                                    final bool isPlaying = isPlayable &&
+                                        playingName == lesson.name;
+
+                                    final IconData icon = !isPlayable
+                                        ? Icons.lock
+                                        : (isPlaying
+                                            ? Icons.graphic_eq
+                                            : Icons.play_arrow);
+                                    final Color color = !isPlayable
+                                        ? Colors.grey
+                                        : Colors.green;
+
+                                    return IconButton(
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                      visualDensity: VisualDensity.compact,
+                                      icon: Icon(icon, color: color),
+                                      onPressed: (!isPlayable || isPlaying)
+                                          ? null
+                                          : () {
+                                              controller.playLesson(lesson);
+                                            },
+                                    );
+                                  }),
                                 ),
                               );
                             },
@@ -426,7 +452,7 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
               enableYoutubeWebViewFallback: true,
               videoUrl: controller.youtubeUri ??
                   Uri.parse('https://www.youtube.com/watch?v='),
-              forceYoutubeWebViewOnly: true,
+              // forceYoutubeWebViewOnly: true,
               preferredQualities: [
                 OmniVideoQuality.high720,
                 OmniVideoQuality.low144,

@@ -144,9 +144,9 @@ class CoursesView extends GetView<CoursesController> {
                       const Icon(Icons.access_time,
                           size: 14, color: Colors.grey),
                       const SizedBox(width: 4),
-                      Text(course.customCourseDuration.toString(),
+                      Text('${course.customCourseDuration?.toInt() ?? 0} Hours',
                           style: const TextStyle(
-                              fontSize: 14, color: Colors.grey)),
+                              fontSize: 12, color: Colors.grey)),
                       const Spacer(),
                       if (hasDiscount)
                         Text(course.coursePrice!.toStringAsFixed(0),

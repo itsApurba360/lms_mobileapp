@@ -21,6 +21,7 @@ class CourseDetailsController extends GetxController with StateMixin {
 
   final RxBool isLessonVideo = false.obs;
 
+
   final currentLessonDetail = LessonDetail().obs;
 
   final videoPlaybackController = Get.find<VideoPlaybackController>();
