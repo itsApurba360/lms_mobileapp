@@ -48,6 +48,7 @@ class CoursesView extends GetView<CoursesController> {
   Widget _courseCard(Course course) {
     final hasDiscount =
         course.customDiscount != null && course.customDiscount! > 0;
+    final isEnrolled = course.membership?.member != null;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -85,7 +86,7 @@ class CoursesView extends GetView<CoursesController> {
                         ),
                       ),
                     ),
-                    if (hasDiscount)
+                    if (hasDiscount && !isEnrolled)
                       Positioned(
                         top: 4,
                         left: 4,
@@ -148,19 +149,38 @@ class CoursesView extends GetView<CoursesController> {
                           style: const TextStyle(
                               fontSize: 12, color: Colors.grey)),
                       const Spacer(),
-                      if (hasDiscount)
+                      if (hasDiscount && !isEnrolled)
                         Text(course.coursePrice!.toStringAsFixed(0),
                             style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey,
                                 decoration: TextDecoration.lineThrough)),
                       if (hasDiscount) const SizedBox(width: 6),
-                      Text(
+                      if (isEnrolled)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: const Text(
+                            'Enrolled',
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      else
+                        Text(
                           (controller.getCoursePrice(course)),
                           style: TextStyle(
                               fontSize: 14,
                               color: hasDiscount ? Colors.red : Colors.green,
-                              fontWeight: FontWeight.bold)),
+                              fontWeight: FontWeight.bold),
+                        ),
+                      
                     ],
                   ),
                 ],

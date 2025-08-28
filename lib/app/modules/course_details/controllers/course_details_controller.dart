@@ -19,6 +19,7 @@ class CourseDetailsController extends GetxController with StateMixin {
   final RxBool loadPlayer = false.obs;
   final RxBool hasDiscount = false.obs;
   final RxBool isPlayerVisible = false.obs;
+  final RxBool isEnrolled = false.obs;
 
   final RxBool isLessonVideo = false.obs;
 
@@ -40,6 +41,9 @@ class CourseDetailsController extends GetxController with StateMixin {
     log(getYouTubeThumbnail(course.value.videoLink), name: 'thumbnail');
     hasDiscount.value =
         course.value.customDiscount != null && course.value.customDiscount! > 0;
+    if (course.value.membership?.member != null) {
+      isEnrolled.value = true;
+    }
     change(null, status: RxStatus.success());
     fetchCourseOutline();
     // fetchCourseResources();
@@ -80,8 +84,14 @@ class CourseDetailsController extends GetxController with StateMixin {
       currentLessonDetail.value =
           LessonDetailResponse.fromJson(response.data).message!;
       loadPlayer.value = false;
-      videoPlaybackController.clearController();
-      playVideo();
+      if (currentLessonDetail.value.customLessonVideos?.isNotEmpty ?? false) {
+        videoPlaybackController.clearController();
+        playVideo();
+      } else {
+        Get.snackbar('Error', 'No video found',
+            colorText: Colors.white,
+            backgroundColor: Theme.of(Get.context!).colorScheme.primary);
+      }
     } catch (e) {
       log(e.toString(), name: 'playLessonError');
       Get.snackbar('Error', e.toString());

@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lms_app/app/models/course.dart';
 import 'package:lms_app/app/routes/app_pages.dart';
 import '../controllers/purchases_controller.dart';
 
@@ -8,62 +10,41 @@ class PurchasesView extends GetView<PurchasesController> {
 
   @override
   Widget build(BuildContext context) {
-    final purchasesList = [
-      {
-        "image": "assets/images/1.jpg",
-        "title": "Flutter for Beginners",
-        "rating": 4,
-        "duration": "4 hrs",
-        "progress": 0.75,
-      },
-      {
-        "image": "assets/images/2.png",
-        "title": "React Crash Course",
-        "rating": 5,
-        "duration": "6 hrs",
-        "progress": 0.43,
-      },
-      {
-        "image": "assets/images/3.png",
-        "title": "Learn Python Basics",
-        "rating": 3,
-        "duration": "3 hrs",
-        "progress": 0.92,
-      },
-    ];
 
     return Container(
       color: const Color.fromARGB(255, 244, 244, 244),
       child: Scaffold(
-        backgroundColor: Colors.transparent,
         appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new),
-            onPressed: () => Get.back(),
-          ),
           title: const Text('My Purchases'),
+          centerTitle: true,
         ),
-        body: ListView.builder(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          itemCount: purchasesList.length,
-          itemBuilder: (_, i) => _purchaseCard(purchasesList[i]),
+        body: controller.obx(
+          (state) => RefreshIndicator(
+            onRefresh: controller.fetchPurchasedCourses,
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              itemCount: controller.purchasedCourses.length,
+              itemBuilder: (context, index) {
+                return _purchaseCard(controller.purchasedCourses[index]);
+              },
+            ),
+          ),
+          onEmpty: const Center(child: Text('No courses found')),
         ),
       ),
     );
   }
 
-  Widget _purchaseCard(Map<String, dynamic> course) {
-    final double progress = course['progress'] ?? 0.0;
+  Widget _purchaseCard(Course course) {
+    // final double progress = course.progress ?? 0.0;
 
     return GestureDetector(
       onTap: () {
         Get.toNamed(
           Routes.COURSE_DETAILS,
           arguments: {
-            'courseId': course['id'] ?? '1', // Provide a default value
-            'courseTitle': course['title'] ?? 'Course Title',
-            'courseImage': course['image'] ?? 'assets/images/placeholder.png',
-            'progress': progress,
+            'id': course.name, // Provide a default value
+            'course': course,
           },
         );
       },
@@ -85,9 +66,20 @@ class PurchasesView extends GetView<PurchasesController> {
                   height: 110,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(
-                      course["image"],
+                    child: CachedNetworkImage(
+                      imageUrl: controller.apiClientController.hostUrl! +
+                          course.image!,
                       fit: BoxFit.cover,
+                      alignment: Alignment.center,
+                      width: double.infinity,
+                      height: double.infinity,
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      errorWidget: (context, url, error) => const Icon(
+                        Icons.error,
+                        color: Colors.red,
+                      ),
                     ),
                   ),
                 ),
@@ -103,7 +95,7 @@ class PurchasesView extends GetView<PurchasesController> {
                   children: [
                     // Title
                     Text(
-                      course["title"],
+                      course.title!,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
@@ -119,7 +111,7 @@ class PurchasesView extends GetView<PurchasesController> {
                       children: List.generate(
                         5,
                         (i) => Icon(
-                          i < course["rating"] ? Icons.star : Icons.star_border,
+                          i < course.rating! ? Icons.star : Icons.star_border,
                           size: 14,
                           color: Colors.orange,
                         ),
@@ -135,7 +127,7 @@ class PurchasesView extends GetView<PurchasesController> {
                             size: 14, color: Colors.grey),
                         const SizedBox(width: 4),
                         Text(
-                          course["duration"],
+                          course.customCourseDuration!.toString(),
                           style: const TextStyle(
                             fontSize: 14,
                             color: Colors.grey,
@@ -150,7 +142,7 @@ class PurchasesView extends GetView<PurchasesController> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(6),
                       child: LinearProgressIndicator(
-                        value: progress,
+                        value: 0,
                         minHeight: 6,
                         backgroundColor: Colors.grey.shade300,
                         valueColor:
@@ -165,7 +157,7 @@ class PurchasesView extends GetView<PurchasesController> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          '${(progress * 100).toStringAsFixed(0)}% completed',
+                          '${(0 * 100).toStringAsFixed(0)}% completed',
                           style: const TextStyle(
                             fontSize: 12,
                             color: Colors.grey,

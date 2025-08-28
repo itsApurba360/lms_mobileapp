@@ -1,47 +1,35 @@
-import 'package:get/get.dart';
+import 'dart:convert';
+import 'dart:developer';
 
-class PurchasesController extends GetxController {
-  // Reactive list of purchases
-  final purchasesList = <Map<String, dynamic>>[].obs;
+import 'package:get/get.dart';
+import 'package:lms_app/app/controllers/api_client_controller.dart';
+import 'package:lms_app/app/models/course.dart';
+
+class PurchasesController extends GetxController with StateMixin {
+  final apiClientController = Get.find<ApiClientController>();
+  var purchasedCourses = <Course>[].obs;
+
 
   @override
   void onInit() {
     super.onInit();
-    _loadPurchases();
+    fetchPurchasedCourses();
   }
 
-  void _loadPurchases() {
-    // Simulating static data — could come from API in real use case
-    purchasesList.value = [
-      {
-        "image": "assets/images/1.jpg",
-        "title": "Flutter for Beginners",
-        "rating": 4,
-        "duration": "4 hrs",
-        "progress": 0.75,
-      },
-      {
-        "image": "assets/images/2.png",
-        "title": "React Crash Course",
-        "rating": 5,
-        "duration": "6 hrs",
-        "progress": 0.43,
-      },
-      {
-        "image": "assets/images/3.png",
-        "title": "Learn Python Basics",
-        "rating": 3,
-        "duration": "3 hrs",
-        "progress": 0.92,
-      },
-    ];
-  }
 
-  // Optional: update progress for a specific course
-  void updateProgress(int index, double newProgress) {
-    if (index >= 0 && index < purchasesList.length) {
-      purchasesList[index]['progress'] = newProgress.clamp(0.0, 1.0);
-      purchasesList.refresh(); // Force UI update
+  // Fetch purchased courses
+  Future<void> fetchPurchasedCourses() async {
+    try {
+      final response = await apiClientController
+          .post('/api/method/lms_360ithub.utils.custom_lms.get_courses', data: {
+        'filters': json.encode({'enrolled': 1})
+      });
+      purchasedCourses.value =
+          CourseResponse.fromJson(response.data).message ?? [];
+      change(null, status: RxStatus.success());
+    } catch (e) {
+      log(e.toString());
     }
   }
+
 }

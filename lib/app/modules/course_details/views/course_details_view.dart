@@ -17,24 +17,25 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
       appBar: AppBar(
         title: const Text(
           'Course Details',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
         ),
+        centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.shopping_cart),
-            onPressed: () {
-              // handle cart action
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.share),
-            onPressed: () {
-              // handle share action
-            },
-          ),
+          // IconButton(
+          //   icon: const Icon(Icons.shopping_cart),
+          //   onPressed: () {
+          //     // handle cart action
+          //   },
+          // ),
+          // IconButton(
+          //   icon: const Icon(Icons.share),
+          //   onPressed: () {
+          //     // handle share action
+          //   },
+          // ),
         ],
       ),
       body: DefaultTabController(
+        initialIndex: !controller.isEnrolled.value ? 0 : 1,
         length: 2,
         child: RefreshIndicator(
           onRefresh: () => controller.fetchCourseOutline(),
@@ -251,7 +252,9 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
           ),
         ),
       ),
-      bottomNavigationBar: SafeArea(
+      bottomNavigationBar: Obx(
+        () => !controller.isEnrolled.value
+            ? SafeArea(
         child: Container(
           padding: const EdgeInsets.all(12),
           color: Colors.white,
@@ -294,6 +297,8 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
             ],
           ),
         ),
+              )
+            : SizedBox.shrink(),
       ),
     );
   }
@@ -356,19 +361,21 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                                   width: 40,
                                   height: 40,
                                   child: Obx(() {
-                                    final bool isPlayable =
+                                      final bool canPlay =
+                                          controller.isEnrolled.value ||
                                         (lesson.includeInPreview == 1);
                                     final String? playingName = controller
                                         .currentLessonDetail.value.name;
-                                    final bool isPlaying = isPlayable &&
+                                      final bool isPlaying =
                                         playingName == lesson.name;
 
-                                    final IconData icon = !isPlayable
+                                      final IconData icon = !canPlay
                                         ? Icons.lock
                                         : (isPlaying
                                             ? Icons.graphic_eq
                                             : Icons.play_arrow);
-                                    final Color color = !isPlayable
+                                      final Color color =
+                                          !canPlay
                                         ? Colors.grey
                                         : Colors.green;
 
@@ -377,7 +384,7 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                                       constraints: const BoxConstraints(),
                                       visualDensity: VisualDensity.compact,
                                       icon: Icon(icon, color: color),
-                                      onPressed: (!isPlayable || isPlaying)
+                                        onPressed: (!canPlay || isPlaying)
                                           ? null
                                           : () {
                                                 controller.scrollToVideo();
