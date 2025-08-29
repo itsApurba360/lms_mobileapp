@@ -8,6 +8,7 @@ import 'package:lms_app/app/models/course.dart';
 import 'package:lms_app/app/models/course_outline.dart';
 import 'package:lms_app/app/models/lesson_detail.dart';
 import 'package:lms_app/app/modules/courses/controllers/courses_controller.dart';
+import 'package:lms_app/app/routes/app_pages.dart';
 import 'package:lms_app/app/utils/helpers.dart';
 import 'package:omni_video_player/omni_video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -83,6 +84,10 @@ class CourseDetailsController extends GetxController with StateMixin {
       );
       currentLessonDetail.value =
           LessonDetailResponse.fromJson(response.data).message!;
+      if (isEnrolled.value) {
+        Get.toNamed(Routes.COURSE_LESSON,
+            arguments: {'lesson': currentLessonDetail.value});
+      } else {
       loadPlayer.value = false;
       if (currentLessonDetail.value.customLessonVideos?.isNotEmpty ?? false) {
         videoPlaybackController.clearController();
@@ -91,6 +96,7 @@ class CourseDetailsController extends GetxController with StateMixin {
         Get.snackbar('Error', 'No video found',
             colorText: Colors.white,
             backgroundColor: Theme.of(Get.context!).colorScheme.primary);
+      }
       }
     } catch (e) {
       log(e.toString(), name: 'playLessonError');
@@ -140,35 +146,5 @@ class CourseDetailsController extends GetxController with StateMixin {
 
     log(uri.toString(), name: 'youtubeUrl');
     return uri;
-  }
-
-  String getVimeoId(String? raw) {
-    if (raw == null || raw.trim().isEmpty) {
-      log('No videoLink provided', name: 'vimeoId');
-      return '';
-    }
-
-    String value = raw.trim();
-    String id = value;
-
-    // If the value is a full Vimeo URL, extract the video ID
-    if (value.startsWith('http://') || value.startsWith('https://')) {
-      try {
-        final uri = Uri.parse(value);
-        final host = uri.host.toLowerCase();
-
-        if (host.contains('vimeo.com')) {
-          if (uri.pathSegments.isNotEmpty) {
-            id = uri.pathSegments.last;
-          }
-        }
-      } catch (_) {
-        // If parsing fails, fall back to treating it as a raw ID
-        id = value;
-      }
-    }
-
-    log(id, name: 'vimeoId');
-    return id;
   }
 }

@@ -1,11 +1,14 @@
 import 'package:get/get.dart';
 
+import '../middleware/auth_middleware.dart';
 import '../modules/chat/bindings/chat_binding.dart';
 import '../modules/chat/views/chat_view.dart';
 import '../modules/chatdetails/bindings/chatdetails_binding.dart';
 import '../modules/chatdetails/views/chatdetails_view.dart';
 import '../modules/course_details/bindings/course_details_binding.dart';
 import '../modules/course_details/views/course_details_view.dart';
+import '../modules/course_lesson/bindings/course_lesson_binding.dart';
+import '../modules/course_lesson/views/course_lesson_view.dart';
 import '../modules/courses/bindings/courses_binding.dart';
 import '../modules/courses/views/courses_view.dart';
 import '../modules/examinstructions/bindings/examinstructions_binding.dart';
@@ -34,7 +37,6 @@ import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/settings/views/settings_view.dart';
 import '../modules/testseries/bindings/testseries_binding.dart';
 import '../modules/testseries/views/testseries_view.dart';
-import '../middleware/auth_middleware.dart';
 
 part 'app_routes.dart';
 
@@ -130,6 +132,11 @@ class AppPages {
       name: _Paths.NOTIFICATIONS,
       page: () => const NotificationsView(),
       binding: NotificationsBinding(),
+    ),
+    GetPage(
+      name: _Paths.COURSE_LESSON,
+      page: () => const CourseLessonView(),
+      binding: CourseLessonBinding(),
     ),
   ];
 }

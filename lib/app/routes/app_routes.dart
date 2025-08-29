@@ -20,6 +20,7 @@ abstract class Routes {
   static const OTP_LOGIN = _Paths.OTP_LOGIN;
   static const PURCHASES = _Paths.PURCHASES;
   static const NOTIFICATIONS = _Paths.NOTIFICATIONS;
+  static const COURSE_LESSON = _Paths.COURSE_LESSON;
 }
 
 abstract class _Paths {
@@ -41,4 +42,5 @@ abstract class _Paths {
   static const OTP_LOGIN = '/otp-login';
   static const PURCHASES = '/purchases';
   static const NOTIFICATIONS = '/notifications';
+  static const COURSE_LESSON = '/course-lesson';
 }

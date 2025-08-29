@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
+import 'package:lms_app/app/routes/app_pages.dart';
 import 'package:lms_app/app/modules/course_details/controllers/course_details_controller.dart';
 import 'package:lms_app/app/utils/helpers.dart';
 import 'package:omni_video_player/omni_video_player.dart';
@@ -46,6 +47,7 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      if (!controller.isEnrolled.value)
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: ClipRRect(
@@ -66,7 +68,7 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                                     child: OmniVideoPlayer(
                                       key: ValueKey<String>(
                                         controller.isLessonVideo.value
-                                            ? 'vimeo-${controller.getVimeoId(
+                                              ? 'vimeo-${getVimeoId(
                                                 controller
                                                     .currentLessonDetail
                                                     .value
@@ -364,16 +366,11 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                                       final bool canPlay =
                                           controller.isEnrolled.value ||
                                         (lesson.includeInPreview == 1);
-                                    final String? playingName = controller
-                                        .currentLessonDetail.value.name;
-                                      final bool isPlaying =
-                                        playingName == lesson.name;
+                                
 
                                       final IconData icon = !canPlay
                                         ? Icons.lock
-                                        : (isPlaying
-                                            ? Icons.graphic_eq
-                                            : Icons.play_arrow);
+                                          : Icons.play_arrow;
                                       final Color color =
                                           !canPlay
                                         ? Colors.grey
@@ -384,11 +381,14 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                                       constraints: const BoxConstraints(),
                                       visualDensity: VisualDensity.compact,
                                       icon: Icon(icon, color: color),
-                                        onPressed: (!canPlay || isPlaying)
+                                        onPressed: (!canPlay)
                                           ? null
                                           : () {
-                                                controller.scrollToVideo();
-                                              controller.playLesson(lesson);
+                                                if (!controller
+                                                    .isEnrolled.value) {
+                                                  controller.scrollToVideo();
+                                                }
+                                                controller.playLesson(lesson);
                                             },
                                     );
                                     },
@@ -486,7 +486,7 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
               ],
             )
           : VideoSourceConfiguration.vimeo(
-              videoId: controller.getVimeoId(controller.currentLessonDetail
+              videoId: getVimeoId(controller.currentLessonDetail
                   .value.customLessonVideos!.first.videoLink),
             ),
       playerTheme: OmniVideoPlayerThemeData().copyWith(
