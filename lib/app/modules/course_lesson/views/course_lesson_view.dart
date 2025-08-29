@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
+import 'package:gpt_markdown/gpt_markdown.dart';
 import 'package:lms_app/app/utils/helpers.dart';
 import 'package:omni_video_player/omni_video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -13,7 +13,7 @@ class CourseLessonView extends GetView<CourseLessonController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lesson Viewer'),
+        title: const Text('Lesson'),
         centerTitle: true,
       ),
       body: controller.obx(
@@ -52,6 +52,16 @@ class CourseLessonView extends GetView<CourseLessonController> {
                       ),
                     ),
                   ),
+                ),
+              ),
+
+            // Show the body markdown
+            if (controller.lesson.value.body != null &&
+                controller.lesson.value.body!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: GptMarkdown(
+                  controller.lesson.value.body!,
                 ),
               ),
           ],
