@@ -1,9 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
-import 'package:lms_app/app/routes/app_pages.dart';
 import 'package:lms_app/app/modules/course_details/controllers/course_details_controller.dart';
 import 'package:lms_app/app/utils/helpers.dart';
 import 'package:omni_video_player/omni_video_player.dart';
@@ -246,7 +246,101 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                 // TAB 1: Info Tab
                 _buildInfoTab(),
                 // TAB 2: Chapters Tab
-                _buildChaptersTab(),
+                controller.obx(
+                  (state) => ListView.builder(
+                    padding: EdgeInsets.fromLTRB(
+                        16, 16, 16, kBottomNavigationBarHeight + 24),
+                    itemCount: controller.courseOutline.length,
+                    itemBuilder: (context, chapterIndex) {
+                      final chapter = controller.courseOutline[chapterIndex];
+                      final lessons = chapter.lessons;
+                      return GestureDetector(
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.grey.shade200),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: AutoSizeText(
+                                      chapter.title ?? '',
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              if (lessons != null && lessons.isNotEmpty)
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: lessons.length,
+                                  itemBuilder: (context, lessonIndex) {
+                                    final lesson = lessons[lessonIndex];
+                                    return ListTile(
+                                      visualDensity: VisualDensity.compact,
+                                      title: Text(lesson.title ?? ''),
+                                      trailing: SizedBox(
+                                        width: 40,
+                                        height: 40,
+                                        child: Obx(
+                                          () {
+                                            final bool canPlay = controller
+                                                    .isEnrolled.value ||
+                                                (lesson.includeInPreview == 1);
+
+                                            final IconData icon = !canPlay
+                                                ? Icons.lock
+                                                : Icons.play_arrow;
+                                            final Color color = !canPlay
+                                                ? Colors.grey
+                                                : Colors.green;
+
+                                            return IconButton(
+                                              padding: EdgeInsets.zero,
+                                              constraints:
+                                                  const BoxConstraints(),
+                                              visualDensity:
+                                                  VisualDensity.compact,
+                                              icon: Icon(icon, color: color),
+                                              onPressed: (!canPlay)
+                                                  ? null
+                                                  : () {
+                                                      if (!controller
+                                                          .isEnrolled.value) {
+                                                        controller
+                                                            .scrollToVideo();
+                                                      }
+                                                      controller
+                                                          .playLesson(lesson);
+                                                    },
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  onEmpty: const Center(child: Text('No lessons found')),
+                  onLoading: const Center(child: CupertinoActivityIndicator()),
+                )
                 // TAB 3: Resources Tab (placeholder)
                 // const SizedBox(),
               ],
@@ -257,152 +351,51 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
       bottomNavigationBar: Obx(
         () => !controller.isEnrolled.value
             ? SafeArea(
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          color: Colors.white,
-          child: Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: AutoSizeText(
-                    controller.coursesController
-                        .getCoursePrice(controller.course.value),
-                    maxLines: 1,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black87,
-                    ),
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  color: Colors.white,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: AutoSizeText(
+                            controller.coursesController
+                                .getCoursePrice(controller.course.value),
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        flex: 1,
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            minimumSize: const Size.fromHeight(50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            elevation: 0,
+                          ),
+                          child: const Text(
+                            "Buy Now",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                flex: 1,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    minimumSize: const Size.fromHeight(50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: const Text(
-                    "Buy Now",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
               )
             : SizedBox.shrink(),
       ),
-    );
-  }
-
-  Obx _buildChaptersTab() {
-    return Obx(
-      () => controller.courseOutline.isEmpty
-          ? const Center(child: Text('No chapters found'))
-          : ListView.builder(
-              padding: EdgeInsets.fromLTRB(
-                  16, 16, 16, kBottomNavigationBarHeight + 24),
-              itemCount: controller.courseOutline.length,
-              itemBuilder: (context, chapterIndex) {
-                final chapter = controller.courseOutline[chapterIndex];
-                final lessons = chapter.lessons;
-                return GestureDetector(
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.grey.shade200),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: AutoSizeText(
-                                chapter.title ?? '',
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        if (lessons != null && lessons.isNotEmpty)
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: lessons.length,
-                            itemBuilder: (context, lessonIndex) {
-                              final lesson = lessons[lessonIndex];
-                              return ListTile(
-                                visualDensity: VisualDensity.compact,
-                                title: Text(lesson.title ?? ''),
-                                subtitle: lesson.body != null
-                                    ? AutoSizeText(
-                                        lesson.body ?? '',
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      )
-                                    : null,
-                                trailing: SizedBox(
-                                  width: 40,
-                                  height: 40,
-                                  child: Obx(() {
-                                      final bool canPlay =
-                                          controller.isEnrolled.value ||
-                                        (lesson.includeInPreview == 1);
-                                
-
-                                      final IconData icon = !canPlay
-                                        ? Icons.lock
-                                          : Icons.play_arrow;
-                                      final Color color =
-                                          !canPlay
-                                        ? Colors.grey
-                                        : Colors.green;
-
-                                    return IconButton(
-                                      padding: EdgeInsets.zero,
-                                      constraints: const BoxConstraints(),
-                                      visualDensity: VisualDensity.compact,
-                                      icon: Icon(icon, color: color),
-                                        onPressed: (!canPlay)
-                                          ? null
-                                          : () {
-                                                if (!controller
-                                                    .isEnrolled.value) {
-                                                  controller.scrollToVideo();
-                                                }
-                                                controller.playLesson(lesson);
-                                            },
-                                    );
-                                    },
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
     );
   }
 

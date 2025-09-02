@@ -45,22 +45,21 @@ class CourseDetailsController extends GetxController with StateMixin {
     if (course.value.membership?.member != null) {
       isEnrolled.value = true;
     }
-    change(null, status: RxStatus.success());
     fetchCourseOutline();
-    // fetchCourseResources();
+    fetchCourseResources();
   }
 
   // Fetch course resources
-  // Future<void> fetchCourseResources() async {
-  //   try {
-  //     await apiClientController.post(
-  //       '/api/method/lms_360ithub.api.get_course_resources',
-  //       data: {'course': course.value.name!},
-  //     );
-  //   } catch (e) {
-  //     Get.snackbar('Error', e.toString());
-  //   }
-  // }
+  Future<void> fetchCourseResources() async {
+    try {
+      final response = await apiClientController.post(
+        '/api/method/lms_360ithub.api.get_course_resources',
+        data: {'course': course.value.name!},
+      );
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
+  }
 
   // Fetch course outline
   Future<void> fetchCourseOutline() async {
@@ -71,6 +70,11 @@ class CourseDetailsController extends GetxController with StateMixin {
       );
       courseOutline.value =
           CourseOutlineResponse.fromJson(response.data).message ?? [];
+      if (courseOutline.value.isEmpty) {
+        change(null, status: RxStatus.empty());
+      } else {
+        change(null, status: RxStatus.success());
+      }
     } catch (e) {
       Get.snackbar('Error', e.toString());
     }
