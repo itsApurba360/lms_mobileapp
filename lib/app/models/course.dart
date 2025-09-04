@@ -44,10 +44,10 @@ class CourseResponse {
 
 class Course {
   String? name;
+  String? owner;
   DateTime? creation;
   DateTime? modified;
   String? modifiedBy;
-  String? owner;
   num? docstatus;
   num? idx;
   String? title;
@@ -57,6 +57,8 @@ class Course {
   String? status;
   String? image;
   String? cardGradient;
+  num? customCourseDuration;
+  String? customLevel;
   num? published;
   DateTime? publishedOn;
   num? upcoming;
@@ -69,30 +71,26 @@ class Course {
   num? paidCertificate;
   String? evaluator;
   num? coursePrice;
+  num? customDiscount;
+  num? customDiscountedPrice;
   String? currency;
   num? amountUsd;
   num? enrollments;
   num? lessons;
   num? rating;
-  dynamic userTags;
-  dynamic comments;
-  dynamic assign;
-  dynamic likedBy;
-  num? customCourseDuration;
-  String? customLevel;
-  num? customDiscount;
-  num? customDiscountedPrice;
+  String? doctype;
+  List<dynamic>? relatedCourses;
+  List<Chapter>? chapters;
+  List<Chapter>? instructors;
+  List<CustomCourseResource>? customCourseResources;
   Membership? membership;
-  List<Instructor>? instructors;
-  num? amount;
-  String? price;
 
   Course({
     this.name,
+    this.owner,
     this.creation,
     this.modified,
     this.modifiedBy,
-    this.owner,
     this.docstatus,
     this.idx,
     this.title,
@@ -102,6 +100,8 @@ class Course {
     this.status,
     this.image,
     this.cardGradient,
+    this.customCourseDuration,
+    this.customLevel,
     this.published,
     this.publishedOn,
     this.upcoming,
@@ -114,33 +114,29 @@ class Course {
     this.paidCertificate,
     this.evaluator,
     this.coursePrice,
+    this.customDiscount,
+    this.customDiscountedPrice,
     this.currency,
     this.amountUsd,
     this.enrollments,
     this.lessons,
     this.rating,
-    this.userTags,
-    this.comments,
-    this.assign,
-    this.likedBy,
-    this.customCourseDuration,
-    this.customLevel,
-    this.customDiscount,
-    this.customDiscountedPrice,
-    this.membership,
+    this.doctype,
+    this.relatedCourses,
+    this.chapters,
     this.instructors,
-    this.amount,
-    this.price,
+    this.customCourseResources,
+    this.membership,
   });
 
   factory Course.fromJson(Map<String, dynamic> json) => Course(
         name: json["name"],
+        owner: json["owner"],
         creation:
             json["creation"] == null ? null : DateTime.parse(json["creation"]),
         modified:
             json["modified"] == null ? null : DateTime.parse(json["modified"]),
         modifiedBy: json["modified_by"],
-        owner: json["owner"],
         docstatus: json["docstatus"],
         idx: json["idx"],
         title: json["title"],
@@ -150,6 +146,8 @@ class Course {
         status: json["status"],
         image: json["image"],
         cardGradient: json["card_gradient"],
+        customCourseDuration: json["custom_course_duration"],
+        customLevel: json["custom_level"],
         published: json["published"],
         publishedOn: json["published_on"] == null
             ? null
@@ -164,36 +162,40 @@ class Course {
         paidCertificate: json["paid_certificate"],
         evaluator: json["evaluator"],
         coursePrice: json["course_price"],
+        customDiscount: json["custom_discount"],
+        customDiscountedPrice: json["custom_discounted_price"],
         currency: json["currency"],
         amountUsd: json["amount_usd"],
         enrollments: json["enrollments"],
         lessons: json["lessons"],
         rating: _toNum(json["rating"]),
-        userTags: json["_user_tags"],
-        comments: json["_comments"],
-        assign: json["_assign"],
-        likedBy: json["_liked_by"],
-        customCourseDuration: json["custom_course_duration"],
-        customLevel: json["custom_level"],
-        customDiscount: json["custom_discount"],
-        customDiscountedPrice: json["custom_discounted_price"],
+        doctype: json["doctype"],
+        relatedCourses: json["related_courses"] == null
+            ? []
+            : List<dynamic>.from(json["related_courses"]!.map((x) => x)),
+        chapters: json["chapters"] == null
+            ? []
+            : List<Chapter>.from(
+                json["chapters"]!.map((x) => Chapter.fromJson(x))),
+        instructors: json["instructors"] == null
+            ? []
+            : List<Chapter>.from(
+                json["instructors"]!.map((x) => Chapter.fromJson(x))),
+        customCourseResources: json["custom_course_resources"] == null
+            ? []
+            : List<CustomCourseResource>.from(json["custom_course_resources"]!
+                .map((x) => CustomCourseResource.fromJson(x))),
         membership: json["membership"] == null
             ? null
             : Membership.fromJson(json["membership"]),
-        instructors: json["instructors"] == null
-            ? []
-            : List<Instructor>.from(
-                json["instructors"]!.map((x) => Instructor.fromJson(x))),
-        amount: json["amount"],
-        price: json["price"],
       );
 
   Map<String, dynamic> toJson() => {
         "name": name,
+        "owner": owner,
         "creation": creation?.toIso8601String(),
         "modified": modified?.toIso8601String(),
         "modified_by": modifiedBy,
-        "owner": owner,
         "docstatus": docstatus,
         "idx": idx,
         "title": title,
@@ -203,6 +205,8 @@ class Course {
         "status": status,
         "image": image,
         "card_gradient": cardGradient,
+        "custom_course_duration": customCourseDuration,
+        "custom_level": customLevel,
         "published": published,
         "published_on":
             "${publishedOn!.year.toString().padLeft(4, '0')}-${publishedOn!.month.toString().padLeft(2, '0')}-${publishedOn!.day.toString().padLeft(2, '0')}",
@@ -216,57 +220,168 @@ class Course {
         "paid_certificate": paidCertificate,
         "evaluator": evaluator,
         "course_price": coursePrice,
+        "custom_discount": customDiscount,
+        "custom_discounted_price": customDiscountedPrice,
         "currency": currency,
         "amount_usd": amountUsd,
         "enrollments": enrollments,
         "lessons": lessons,
         "rating": rating,
-        "_user_tags": userTags,
-        "_comments": comments,
-        "_assign": assign,
-        "_liked_by": likedBy,
-        "custom_course_duration": customCourseDuration,
-        "custom_level": customLevel,
-        "custom_discount": customDiscount,
-        "custom_discounted_price": customDiscountedPrice,
-        "membership": membership?.toJson(),
+        "doctype": doctype,
+        "related_courses": relatedCourses == null
+            ? []
+            : List<dynamic>.from(relatedCourses!.map((x) => x)),
+        "chapters": chapters == null
+            ? []
+            : List<dynamic>.from(chapters!.map((x) => x.toJson())),
         "instructors": instructors == null
             ? []
             : List<dynamic>.from(instructors!.map((x) => x.toJson())),
-        "amount": amount,
-        "price": price,
+        "custom_course_resources": customCourseResources == null
+            ? []
+            : List<dynamic>.from(customCourseResources!.map((x) => x.toJson())),
+        "membership": membership?.toJson(),
       };
 }
 
-class Instructor {
+class Chapter {
   String? name;
-  String? username;
-  String? fullName;
-  dynamic userImage;
-  String? firstName;
+  String? owner;
+  DateTime? creation;
+  DateTime? modified;
+  String? modifiedBy;
+  num? docstatus;
+  num? idx;
+  String? chapter;
+  String? parent;
+  String? parentfield;
+  String? parenttype;
+  String? doctype;
+  String? instructor;
 
-  Instructor({
+  Chapter({
     this.name,
-    this.username,
-    this.fullName,
-    this.userImage,
-    this.firstName,
+    this.owner,
+    this.creation,
+    this.modified,
+    this.modifiedBy,
+    this.docstatus,
+    this.idx,
+    this.chapter,
+    this.parent,
+    this.parentfield,
+    this.parenttype,
+    this.doctype,
+    this.instructor,
   });
 
-  factory Instructor.fromJson(Map<String, dynamic> json) => Instructor(
+  factory Chapter.fromJson(Map<String, dynamic> json) => Chapter(
         name: json["name"],
-        username: json["username"],
-        fullName: json["full_name"],
-        userImage: json["user_image"],
-        firstName: json["first_name"],
+        owner: json["owner"],
+        creation:
+            json["creation"] == null ? null : DateTime.parse(json["creation"]),
+        modified:
+            json["modified"] == null ? null : DateTime.parse(json["modified"]),
+        modifiedBy: json["modified_by"],
+        docstatus: json["docstatus"],
+        idx: json["idx"],
+        chapter: json["chapter"],
+        parent: json["parent"],
+        parentfield: json["parentfield"],
+        parenttype: json["parenttype"],
+        doctype: json["doctype"],
+        instructor: json["instructor"],
       );
 
   Map<String, dynamic> toJson() => {
         "name": name,
-        "username": username,
-        "full_name": fullName,
-        "user_image": userImage,
-        "first_name": firstName,
+        "owner": owner,
+        "creation": creation?.toIso8601String(),
+        "modified": modified?.toIso8601String(),
+        "modified_by": modifiedBy,
+        "docstatus": docstatus,
+        "idx": idx,
+        "chapter": chapter,
+        "parent": parent,
+        "parentfield": parentfield,
+        "parenttype": parenttype,
+        "doctype": doctype,
+        "instructor": instructor,
+      };
+}
+
+class CustomCourseResource {
+  String? name;
+  String? owner;
+  DateTime? creation;
+  DateTime? modified;
+  String? modifiedBy;
+  num? docstatus;
+  num? idx;
+  String? title;
+  String? type;
+  String? attachment;
+  num? includeInPreview;
+  String? parent;
+  String? parentfield;
+  String? parenttype;
+  String? doctype;
+
+  CustomCourseResource({
+    this.name,
+    this.owner,
+    this.creation,
+    this.modified,
+    this.modifiedBy,
+    this.docstatus,
+    this.idx,
+    this.title,
+    this.type,
+    this.attachment,
+    this.includeInPreview,
+    this.parent,
+    this.parentfield,
+    this.parenttype,
+    this.doctype,
+  });
+
+  factory CustomCourseResource.fromJson(Map<String, dynamic> json) =>
+      CustomCourseResource(
+        name: json["name"],
+        owner: json["owner"],
+        creation:
+            json["creation"] == null ? null : DateTime.parse(json["creation"]),
+        modified:
+            json["modified"] == null ? null : DateTime.parse(json["modified"]),
+        modifiedBy: json["modified_by"],
+        docstatus: json["docstatus"],
+        idx: json["idx"],
+        title: json["title"],
+        type: json["type"],
+        attachment: json["attachment"],
+        includeInPreview: json["include_in_preview"],
+        parent: json["parent"],
+        parentfield: json["parentfield"],
+        parenttype: json["parenttype"],
+        doctype: json["doctype"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "name": name,
+        "owner": owner,
+        "creation": creation?.toIso8601String(),
+        "modified": modified?.toIso8601String(),
+        "modified_by": modifiedBy,
+        "docstatus": docstatus,
+        "idx": idx,
+        "title": title,
+        "type": type,
+        "attachment": attachment,
+        "include_in_preview": includeInPreview,
+        "parent": parent,
+        "parentfield": parentfield,
+        "parenttype": parenttype,
+        "doctype": doctype,
       };
 }
 

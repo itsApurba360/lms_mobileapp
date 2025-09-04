@@ -3,10 +3,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lms_app/app/controllers/api_client_controller.dart';
+import 'package:lms_app/app/controllers/razorpay_controller.dart';
 import 'package:lms_app/app/controllers/video_playback_controller.dart';
 import 'package:lms_app/app/models/course.dart';
 import 'package:lms_app/app/models/course_outline.dart';
 import 'package:lms_app/app/models/lesson_detail.dart';
+import 'package:lms_app/app/models/razorpay.dart';
 import 'package:lms_app/app/modules/courses/controllers/courses_controller.dart';
 import 'package:lms_app/app/routes/app_pages.dart';
 import 'package:lms_app/app/utils/helpers.dart';
@@ -20,7 +22,6 @@ class CourseDetailsController extends GetxController with StateMixin {
   final RxBool loadPlayer = false.obs;
   final RxBool hasDiscount = false.obs;
   final RxBool isPlayerVisible = false.obs;
-  final RxBool isEnrolled = false.obs;
 
   final RxBool isLessonVideo = false.obs;
 
@@ -35,6 +36,8 @@ class CourseDetailsController extends GetxController with StateMixin {
 
   final coursesController = Get.find<CoursesController>();
 
+  get isEnrolled => course.value.membership?.member != null ? true : false;
+
   @override
   void onInit() {
     super.onInit();
@@ -42,11 +45,40 @@ class CourseDetailsController extends GetxController with StateMixin {
     log(getYouTubeThumbnail(course.value.videoLink), name: 'thumbnail');
     hasDiscount.value =
         course.value.customDiscount != null && course.value.customDiscount! > 0;
-    if (course.value.membership?.member != null) {
-      isEnrolled.value = true;
-    }
     fetchCourseOutline();
     fetchCourseResources();
+    fetchCourseDetails();
+  }
+
+  Future<void> buyCourse() async {
+    try {
+      final response = await apiClientController.post(
+        '/api/method/lms_360ithub.api.buy_course',
+        data: {
+          'course': course.value.name!,
+          'amount': course.value.customDiscountedPrice!.toInt(),
+          'total_amount': course.value.customDiscountedPrice!.toInt(),
+        },
+      );
+      final razorpay = RazorpayResponse.fromJson(response.data).message!;
+      final razorpayController = Get.put(RazorpayController());
+      await razorpayController.startPayment(razorpay);
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
+  }
+
+  // Fetch course details
+  Future<void> fetchCourseDetails() async {
+    try {
+      final response = await apiClientController.post(
+        '/api/method/lms_360ithub.utils.custom_lms.get_course_details',
+        data: {'course': course.value.name!},
+      );
+      course.value = Course.fromJson(response.data['message']);
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
   }
 
   // Fetch course resources
@@ -80,7 +112,7 @@ class CourseDetailsController extends GetxController with StateMixin {
     }
   }
 
-  playLesson(Lesson lesson) async {
+  Future<void> playLesson(Lesson lesson) async {
     try {
       final response = await apiClientController.post(
         '/api/method/lms_360ithub.api.get_lesson_details',
@@ -88,19 +120,19 @@ class CourseDetailsController extends GetxController with StateMixin {
       );
       currentLessonDetail.value =
           LessonDetailResponse.fromJson(response.data).message!;
-      if (isEnrolled.value) {
+      if (isEnrolled) {
         Get.toNamed(Routes.COURSE_LESSON,
             arguments: {'lesson': currentLessonDetail.value});
       } else {
-      loadPlayer.value = false;
-      if (currentLessonDetail.value.customLessonVideos?.isNotEmpty ?? false) {
-        videoPlaybackController.clearController();
-        playVideo();
-      } else {
-        Get.snackbar('Error', 'No video found',
-            colorText: Colors.white,
-            backgroundColor: Theme.of(Get.context!).colorScheme.primary);
-      }
+        loadPlayer.value = false;
+        if (currentLessonDetail.value.customLessonVideos?.isNotEmpty ?? false) {
+          videoPlaybackController.clearController();
+          playVideo();
+        } else {
+          Get.snackbar('Error', 'No video found',
+              colorText: Colors.white,
+              backgroundColor: Theme.of(Get.context!).colorScheme.primary);
+        }
       }
     } catch (e) {
       log(e.toString(), name: 'playLessonError');

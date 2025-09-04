@@ -36,7 +36,7 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
         ],
       ),
       body: DefaultTabController(
-        initialIndex: !controller.isEnrolled.value ? 0 : 1,
+        initialIndex: !controller.isEnrolled ? 0 : 1,
         length: 2,
         child: RefreshIndicator(
           onRefresh: () => controller.fetchCourseOutline(),
@@ -47,7 +47,10 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (!controller.isEnrolled.value)
+                     
+                      Obx(
+                        () => !controller.isEnrolled
+                            ?
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: ClipRRect(
@@ -140,7 +143,10 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                             ),
                           ),
                         ),
+                              )
+                            : SizedBox.shrink(),
                       ),
+
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Column(
@@ -297,7 +303,7 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                                         child: Obx(
                                           () {
                                             final bool canPlay = controller
-                                                    .isEnrolled.value ||
+                                                    .isEnrolled ||
                                                 (lesson.includeInPreview == 1);
 
                                             final IconData icon = !canPlay
@@ -318,7 +324,7 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                                                   ? null
                                                   : () {
                                                       if (!controller
-                                                          .isEnrolled.value) {
+                                                          .isEnrolled) {
                                                         controller
                                                             .scrollToVideo();
                                                       }
@@ -349,7 +355,7 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
         ),
       ),
       bottomNavigationBar: Obx(
-        () => !controller.isEnrolled.value
+        () => !controller.isEnrolled
             ? SafeArea(
                 child: Container(
                   padding: const EdgeInsets.all(12),
@@ -375,7 +381,9 @@ class CourseDetailsView extends GetView<CourseDetailsController> {
                       Expanded(
                         flex: 1,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            await controller.buyCourse();
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green,
                             minimumSize: const Size.fromHeight(50),
