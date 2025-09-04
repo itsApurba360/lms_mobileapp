@@ -1,22 +1,24 @@
 import 'dart:convert';
 
-PurpleFile purpleFileFromJson(String str) =>
-    PurpleFile.fromJson(json.decode(str));
+AttachmentResponse attachmentResponseFromJson(String str) =>
+    AttachmentResponse.fromJson(json.decode(str));
 
-String purpleFileToJson(PurpleFile data) => json.encode(data.toJson());
+String attachmentResponseToJson(AttachmentResponse data) =>
+    json.encode(data.toJson());
 
-class PurpleFile {
-  List<Message>? message;
+class AttachmentResponse {
+  List<Attachment>? message;
 
-  PurpleFile({
+  AttachmentResponse({
     this.message,
   });
 
-  factory PurpleFile.fromJson(Map<String, dynamic> json) => PurpleFile(
+  factory AttachmentResponse.fromJson(Map<String, dynamic> json) =>
+      AttachmentResponse(
         message: json["message"] == null
             ? []
-            : List<Message>.from(
-                json["message"]!.map((x) => Message.fromJson(x))),
+            : List<Attachment>.from(
+                json["message"]!.map((x) => Attachment.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -26,7 +28,7 @@ class PurpleFile {
       };
 }
 
-class Message {
+class Attachment {
   String? name;
   DateTime? creation;
   DateTime? modified;
@@ -60,7 +62,7 @@ class Message {
   dynamic assign;
   dynamic likedBy;
 
-  Message({
+  Attachment({
     this.name,
     this.creation,
     this.modified,
@@ -95,7 +97,7 @@ class Message {
     this.likedBy,
   });
 
-  factory Message.fromJson(Map<String, dynamic> json) => Message(
+  factory Attachment.fromJson(Map<String, dynamic> json) => Attachment(
         name: json["name"],
         creation:
             json["creation"] == null ? null : DateTime.parse(json["creation"]),

@@ -64,7 +64,7 @@ class CourseDetailsController extends GetxController with StateMixin {
       final razorpayController = Get.put(RazorpayController());
       await razorpayController.startPayment(razorpay);
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      log(e.toString(), name: 'buyCourseError');
     }
   }
 
@@ -77,7 +77,7 @@ class CourseDetailsController extends GetxController with StateMixin {
       );
       course.value = Course.fromJson(response.data['message']);
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      log(e.toString(), name: 'fetchCourseDetailsError');
     }
   }
 
@@ -89,7 +89,7 @@ class CourseDetailsController extends GetxController with StateMixin {
         data: {'course': course.value.name!},
       );
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      log(e.toString(), name: 'fetchCourseResourcesError');
     }
   }
 
@@ -108,7 +108,7 @@ class CourseDetailsController extends GetxController with StateMixin {
         change(null, status: RxStatus.success());
       }
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      log(e.toString(), name: 'fetchCourseOutlineError');
     }
   }
 
@@ -136,7 +136,6 @@ class CourseDetailsController extends GetxController with StateMixin {
       }
     } catch (e) {
       log(e.toString(), name: 'playLessonError');
-      Get.snackbar('Error', e.toString());
     }
   }
 

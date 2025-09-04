@@ -55,7 +55,75 @@ class CourseLessonView extends GetView<CourseLessonController> {
                 ),
               ),
 
-            // Show the body markdown
+            // Show tab bar and tab content when lesson resources are available
+            if (controller.lessonResources.isNotEmpty)
+              Column(
+                children: [
+                  TabBar(
+                    controller: controller.tabController,
+                    tabs: const [
+                      Tab(text: 'Info'),
+                      Tab(text: 'Resources'),
+                    ],
+                    indicatorColor: Theme.of(context).primaryColor,
+                    labelColor: Theme.of(context).primaryColor,
+                    unselectedLabelColor: Colors.grey,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    child: TabBarView(
+                      controller: controller.tabController,
+                      children: [
+                        // Info Tab Content
+                        if (controller.lesson.value.body != null &&
+                            controller.lesson.value.body!.isNotEmpty)
+                          SingleChildScrollView(
+                            padding: const EdgeInsets.all(20.0),
+                            child: GptMarkdown(
+                              controller.lesson.value.body!,
+                            ),
+                          )
+                        else
+                          const Center(
+                            child: Text('No information available'),
+                          ),
+                        // Resources Tab Content
+                        ListView.builder(
+                          padding: const EdgeInsets.all(16.0),
+                          itemCount: controller.lessonResources.length,
+                          itemBuilder: (context, index) {
+                            final resource = controller.lessonResources[index];
+                            return Card(
+                              elevation: 1,
+                              margin: const EdgeInsets.only(bottom: 12.0),
+                              child: ListTile(
+                                leading: Icon(Icons.insert_drive_file,
+                                    color: Theme.of(context).primaryColor),
+                                title: Text(
+                                  resource.fileName ?? 'Resource',
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                subtitle: Text(
+                                  '${resource.fileType ?? 'File'} • ${formatFileSize(resource.fileSize)}',
+                                ),
+                                trailing: Icon(Icons.download,
+                                    color: Theme.of(context).primaryColor),
+                                onTap: () => controller.downloadAndOpenResource(
+                                  resource.fileUrl,
+                                  resource.fileName,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            else
+            // Show the body markdown directly when no resources
             if (controller.lesson.value.body != null &&
                 controller.lesson.value.body!.isNotEmpty)
               Padding(
@@ -66,8 +134,26 @@ class CourseLessonView extends GetView<CourseLessonController> {
               ),
           ],
         ),
+        onLoading: const Center(
+          child: CircularProgressIndicator.adaptive(),
+        ),
       ),
     );
+  }
+
+  String formatFileSize(num? bytes) {
+    if (bytes == null) return 'Unknown size';
+
+    const suffixes = ['B', 'KB', 'MB', 'GB'];
+    var i = 0;
+    var size = bytes.toDouble();
+
+    while (size >= 1024 && i < suffixes.length - 1) {
+      size /= 1024;
+      i++;
+    }
+
+    return '${size.toStringAsFixed(1)} ${suffixes[i]}';
   }
 
   VideoPlayerConfiguration videoPlayerConfig() {

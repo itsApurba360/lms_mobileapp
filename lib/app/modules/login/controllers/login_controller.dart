@@ -6,7 +6,7 @@ import 'package:lms_app/app/routes/app_pages.dart';
 class LoginController extends GetxController {
   // Email and Password text controllers
   final hostUrlController = TextEditingController(
-    text: 'http://192.168.1.122:8004',
+    text: 'http://192.168.1.161:8004',
   );
   final emailController = TextEditingController(
     text: 'mohan.ra@360ithub.co.in',
