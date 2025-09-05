@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 
 import '../middleware/auth_middleware.dart';
+import '../modules/address_form/bindings/address_form_binding.dart';
+import '../modules/address_form/views/address_form_view.dart';
 import '../modules/chat/bindings/chat_binding.dart';
 import '../modules/chat/views/chat_view.dart';
 import '../modules/chatdetails/bindings/chatdetails_binding.dart';
@@ -137,6 +139,11 @@ class AppPages {
       name: _Paths.COURSE_LESSON,
       page: () => const CourseLessonView(),
       binding: CourseLessonBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADDRESS_FORM,
+      page: () => const AddressFormView(),
+      binding: AddressFormBinding(),
     ),
   ];
 }

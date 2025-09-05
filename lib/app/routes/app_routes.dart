@@ -21,6 +21,7 @@ abstract class Routes {
   static const PURCHASES = _Paths.PURCHASES;
   static const NOTIFICATIONS = _Paths.NOTIFICATIONS;
   static const COURSE_LESSON = _Paths.COURSE_LESSON;
+  static const ADDRESS_FORM = _Paths.ADDRESS_FORM;
 }
 
 abstract class _Paths {
@@ -43,4 +44,5 @@ abstract class _Paths {
   static const PURCHASES = '/purchases';
   static const NOTIFICATIONS = '/notifications';
   static const COURSE_LESSON = '/course-lesson';
+  static const ADDRESS_FORM = '/address-form';
 }

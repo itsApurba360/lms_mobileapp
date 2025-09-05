@@ -60,9 +60,14 @@ class CourseDetailsController extends GetxController with StateMixin {
           'total_amount': course.value.customDiscountedPrice!.toInt(),
         },
       );
-      final razorpay = RazorpayResponse.fromJson(response.data).message!;
-      final razorpayController = Get.put(RazorpayController());
-      await razorpayController.startPayment(razorpay);
+      if (response.statusCode == 404) {
+        Get.toNamed(Routes.ADDRESS_FORM);
+        return;
+      } else {
+        final razorpay = RazorpayResponse.fromJson(response.data).message!;
+        final razorpayController = Get.put(RazorpayController());
+        await razorpayController.startPayment(razorpay);
+      }
     } catch (e) {
       log(e.toString(), name: 'buyCourseError');
     }
@@ -102,7 +107,7 @@ class CourseDetailsController extends GetxController with StateMixin {
       );
       courseOutline.value =
           CourseOutlineResponse.fromJson(response.data).message ?? [];
-      if (courseOutline.value.isEmpty) {
+      if (courseOutline.isEmpty) {
         change(null, status: RxStatus.empty());
       } else {
         change(null, status: RxStatus.success());
