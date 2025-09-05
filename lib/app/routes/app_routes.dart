@@ -22,6 +22,8 @@ abstract class Routes {
   static const NOTIFICATIONS = _Paths.NOTIFICATIONS;
   static const COURSE_LESSON = _Paths.COURSE_LESSON;
   static const ADDRESS_FORM = _Paths.ADDRESS_FORM;
+  static const REGISTER = _Paths.REGISTER;
+  static const OTP_VERIFICATION = _Paths.OTP_VERIFICATION;
 }
 
 abstract class _Paths {
@@ -45,4 +47,6 @@ abstract class _Paths {
   static const NOTIFICATIONS = '/notifications';
   static const COURSE_LESSON = '/course-lesson';
   static const ADDRESS_FORM = '/address-form';
+  static const REGISTER = '/register';
+  static const OTP_VERIFICATION = '/otp-verification';
 }

@@ -29,10 +29,14 @@ import '../modules/notifications/bindings/notifications_binding.dart';
 import '../modules/notifications/views/notifications_view.dart';
 import '../modules/otp_login/bindings/otp_login_binding.dart';
 import '../modules/otp_login/views/otp_login_view.dart';
+import '../modules/otp_verification/bindings/otp_verification_binding.dart';
+import '../modules/otp_verification/views/otp_verification_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/purchases/bindings/purchases_binding.dart';
 import '../modules/purchases/views/purchases_view.dart';
+import '../modules/register/bindings/register_binding.dart';
+import '../modules/register/views/register_view.dart';
 import '../modules/result/bindings/result_binding.dart';
 import '../modules/result/views/result_view.dart';
 import '../modules/settings/bindings/settings_binding.dart';
@@ -144,6 +148,16 @@ class AppPages {
       name: _Paths.ADDRESS_FORM,
       page: () => const AddressFormView(),
       binding: AddressFormBinding(),
+    ),
+    GetPage(
+      name: _Paths.REGISTER,
+      page: () => const RegisterView(),
+      binding: RegisterBinding(),
+    ),
+    GetPage(
+      name: _Paths.OTP_VERIFICATION,
+      page: () => const OtpVerificationView(),
+      binding: OtpVerificationBinding(),
     ),
   ];
 }

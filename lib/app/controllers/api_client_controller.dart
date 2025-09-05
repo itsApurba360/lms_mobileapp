@@ -415,6 +415,31 @@ class ApiClientController extends GetxController {
     }
   }
 
+  /// New registration
+  Future<Response<dynamic>> newRegistration({
+    required String studentName,
+    required String email,
+    required String mobileNo,
+    required String password,
+    required String hostUrl,
+  }) async {
+    try {
+      await _setHostUrl(hostUrl);
+      return await dio.post(
+        '/api/method/lms_360ithub.utils.custom_login.new_registration',
+        data: {
+          'student_name': studentName,
+          'email': email,
+          'mobile_no': mobileNo,
+          'password': password,
+        },
+      );
+    } on DioException catch (e) {
+      log('✗ newRegistration error: ${e.message}', error: e, name: 'Auth');
+      rethrow;
+    }
+  }
+
   /// Check if login response indicates success
   bool _isLoginSuccessful(Response response) {
     if (response.statusCode != 200) return false;

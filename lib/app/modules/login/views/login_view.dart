@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lms_app/app/modules/login/controllers/login_controller.dart';
 import 'package:lms_app/app/modules/otp_login/views/otp_login_view.dart';
+import 'package:lms_app/app/routes/app_pages.dart';
 import 'package:lms_app/app/utils/widgets/custom_loading_button.dart';
 
 class LoginView extends StatefulWidget {
@@ -18,7 +19,6 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -34,19 +34,16 @@ class _LoginViewState extends State<LoginView> {
               const SizedBox(height: 24),
 
               // "Login to continue"
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Login to continue",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.grey.shade600,
-                  ),
+              Text(
+                "Login to continue",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.grey.shade600,
                 ),
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(height: 24),
 
               // Email Input
               TextFormField(
@@ -142,6 +139,30 @@ class _LoginViewState extends State<LoginView> {
                   ),
                 ),
               ),
+
+              SizedBox(height: 24),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Don't have an account?",
+                    style: TextStyle(
+                      color: Colors.grey.shade800,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => Get.offNamed(Routes.REGISTER),
+                    child: Text(
+                      "Create new",
+                      style: TextStyle(
+                        color: Theme.of(Get.context!).colorScheme.primary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         ),
