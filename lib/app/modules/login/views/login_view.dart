@@ -126,19 +126,19 @@ class _LoginViewState extends State<LoginView> {
               ),
 
               // "Login with Mobile Number" Text Button
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () => Get.to(() => OtpLoginView()),
-                  child: Text(
-                    "Login with Mobile Number",
-                    style: TextStyle(
-                      color: Theme.of(Get.context!).colorScheme.primary,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
+              // Align(
+              //   alignment: Alignment.centerRight,
+              //   child: TextButton(
+              //     onPressed: () => Get.to(() => OtpLoginView()),
+              //     child: Text(
+              //       "Login with Mobile Number",
+              //       style: TextStyle(
+              //         color: Theme.of(Get.context!).colorScheme.primary,
+              //         fontWeight: FontWeight.w500,
+              //       ),
+              //     ),
+              //   ),
+              // ),
 
               SizedBox(height: 24),
 
