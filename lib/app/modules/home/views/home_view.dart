@@ -1,11 +1,10 @@
 import 'dart:async';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/home_controller.dart';
-import '../../notifications/views/notifications_view.dart';
-import '../../../routes/app_pages.dart';
-import '../../notifications/bindings/notifications_binding.dart';
-import '../widgets/menu_drawer.dart';
+import 'package:lms_app/app/modules/home/controllers/home_controller.dart';
+import 'package:lms_app/app/modules/home/widgets/menu_drawer.dart';
+import 'package:lms_app/app/routes/app_pages.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -45,17 +44,13 @@ class _HomeViewState extends State<HomeView> {
           IconButton(
             icon: const Icon(Icons.notifications_none_outlined),
             onPressed: () {
-              Get.to(
-                () => NotificationsView(),
-                binding: NotificationsBinding(),
-                preventDuplicates: false,
+              Get.toNamed(
+                Routes.NOTIFICATIONS,
               );
             },
           ),
         ],
         elevation: 0,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
         title: Center(
           child: Image.asset(
             'assets/images/logo.png',
@@ -69,9 +64,9 @@ class _HomeViewState extends State<HomeView> {
           return BottomNavigationBar(
             currentIndex: selectedIndex,
             type: BottomNavigationBarType.fixed,
-            selectedItemColor: Colors.green,
-            unselectedItemColor: Colors.grey,
-            backgroundColor: Colors.white,
+            selectedItemColor: Theme.of(context).primaryColor,
+            unselectedItemColor:
+                Theme.of(context).primaryColor.withValues(alpha: 0.5),
             onTap: (index) {
               switch (index) {
                 case 0:
@@ -99,105 +94,115 @@ class _HomeViewState extends State<HomeView> {
           );
         },
       ),
-      body: Container(
-        color: const Color.fromARGB(255, 251, 251, 251),
-        child: SingleChildScrollView(
+      body: RefreshIndicator.adaptive(
+        onRefresh: () async {
+          // Add your refresh logic here
+          controller.onInit();
+        },
+        child: ListView(
           padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Hi Prasant 👋', style: TextStyle(fontSize: 18)),
-              Text("Let's start learning!",
-                  style: TextStyle(color: Colors.grey[600])),
-              SizedBox(height: 20),
-              _buildSearchBox(),
-              SizedBox(height: 12),
-              _buildImageCarousel(carouselController),
-              SizedBox(height: 20),
-              _buildGridIcons(),
-              SizedBox(height: 20),
-
-              // Text('Continue Learning', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              // SizedBox(height: 10),
-              // _buildCourseSlider(
-              //   pageController: _pageController,
-              //   pageIndex: _pageIndex,
-              //   courseList: [
-              //     _courseCardWithProgress(
-              //       title: "Python Advanced Course",
-              //       progressPercent: 0.65,
-              //       showProgress: true,
-              //       showPriceTime: false,
-              //       priceText: "₹4999",
-              //       durationText: "3:00 hrs",
-              //     ),
-              //     _courseCardWithProgress(
-              //       title: "Flutter for Beginners",
-              //       progressPercent: 0.3,
-              //       showProgress: true,
-              //       showPriceTime: false,
-              //       priceText: "₹2999",
-              //       durationText: "1:30 hrs",
-              //     ),
-              //   ],
-              // ),
-              // SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Newest Courses',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Get.toNamed(Routes.COURSES);
-                    },
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      minimumSize: Size(50, 30),
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    child: Row(
-                      children: [
-                        Text('View All',
-                            style: TextStyle(color: Colors.grey.shade600)),
-                        SizedBox(width: 4),
-                        Icon(Icons.arrow_forward_ios,
-                            size: 12, color: Colors.grey),
-                      ],
-                    ),
-                  ),
-                ],
+          children: [
+            AutoSizeText(
+              'Hi ${controller.userDetails.student?.studentName ?? controller.userDetails.user?.fullName ?? ""} 👋',
+              style: TextStyle(fontSize: 18),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              minFontSize: 14,
+            ),
+            Text(
+              "Let's start learning!",
+              style: TextStyle(
+                color: Colors.grey[600],
               ),
+            ),
+            SizedBox(height: 20),
+            _buildSearchBox(),
+            SizedBox(height: 12),
+            _buildImageCarousel(carouselController),
+            SizedBox(height: 20),
+            _buildGridIcons(),
+            SizedBox(height: 20),
 
-              SizedBox(height: 10),
-              _buildNewestCourses(),
-              SizedBox(height: 0),
-              // Text('Recommended For You', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              // SizedBox(height: 10),
-              // _buildCourseSlider(
-              //   courseList: [
-              //     _courseCardWithProgress(
-              //       title: "Mastering Java",
-              //       progressPercent: 0.0,
-              //       showProgress: false,
-              //       showPriceTime: true,
-              //       priceText: "₹2499",
-              //       durationText: "3:00 hrs",
-              //     ),
-              //     _courseCardWithProgress(
-              //       title: "Kotlin Crash Course",
-              //       progressPercent: 0.0,
-              //       showProgress: false,
-              //       showPriceTime: true,
-              //       priceText: "₹1999",
-              //       durationText: "2:15 hrs",
-              //     ),
-              //   ],
-              // ),
-            ],
-          ),
+            // Text('Continue Learning', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            // SizedBox(height: 10),
+            // _buildCourseSlider(
+            //   pageController: _pageController,
+            //   pageIndex: _pageIndex,
+            //   courseList: [
+            //     _courseCardWithProgress(
+            //       title: "Python Advanced Course",
+            //       progressPercent: 0.65,
+            //       showProgress: true,
+            //       showPriceTime: false,
+            //       priceText: "₹4999",
+            //       durationText: "3:00 hrs",
+            //     ),
+            //     _courseCardWithProgress(
+            //       title: "Flutter for Beginners",
+            //       progressPercent: 0.3,
+            //       showProgress: true,
+            //       showPriceTime: false,
+            //       priceText: "₹2999",
+            //       durationText: "1:30 hrs",
+            //     ),
+            //   ],
+            // ),
+            // SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Newest Courses',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Get.toNamed(Routes.COURSES);
+                  },
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: Size(50, 30),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Row(
+                    children: [
+                      Text('View All',
+                          style: TextStyle(color: Colors.grey.shade600)),
+                      SizedBox(width: 4),
+                      Icon(Icons.arrow_forward_ios,
+                          size: 12, color: Colors.grey),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+            SizedBox(height: 10),
+            _buildNewestCourses(),
+            SizedBox(height: 0),
+            // Text('Recommended For You', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            // SizedBox(height: 10),
+            // _buildCourseSlider(
+            //   courseList: [
+            //     _courseCardWithProgress(
+            //       title: "Mastering Java",
+            //       progressPercent: 0.0,
+            //       showProgress: false,
+            //       showPriceTime: true,
+            //       priceText: "₹2499",
+            //       durationText: "3:00 hrs",
+            //     ),
+            //     _courseCardWithProgress(
+            //       title: "Kotlin Crash Course",
+            //       progressPercent: 0.0,
+            //       showProgress: false,
+            //       showPriceTime: true,
+            //       priceText: "₹1999",
+            //       durationText: "2:15 hrs",
+            //     ),
+            //   ],
+            // ),
+          ],
         ),
       ),
     );
@@ -377,7 +382,7 @@ class _HomeViewState extends State<HomeView> {
         ),
       );
 
-  Widget _courseCardWithProgress({
+  Widget courseCardWithProgress({
     required String title,
     required double progressPercent,
     required bool showProgress,
