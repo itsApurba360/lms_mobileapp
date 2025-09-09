@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/settings_controller.dart';
 
-const Color backgroundColor = Color.fromARGB(255, 244, 244, 244);
 
 class SettingsView extends GetView<SettingsController> {
   const SettingsView({super.key});
@@ -11,12 +10,11 @@ class SettingsView extends GetView<SettingsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SettingsView'),
+        title: const Text('Settings'),
         centerTitle: true,
       ),
-      backgroundColor: backgroundColor, // 👈 Set light grey bg
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: GetBuilder<SettingsController>(
           builder: (controller) {
             return SingleChildScrollView(
@@ -35,9 +33,9 @@ class SettingsView extends GetView<SettingsController> {
                       onPressed: () {
                         // Handle forgot password action
                       },
-                      child: const Text(
+                      child: Text(
                         "Forgot Password?",
-                        style: TextStyle(color: Colors.green),
+                        style: TextStyle(color: Theme.of(context).primaryColor),
                       ),
                     ),
                   ),
@@ -63,13 +61,13 @@ class SettingsView extends GetView<SettingsController> {
                         // Handle profile update
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
+                        backgroundColor: Theme.of(context).primaryColor,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Change Password',
                         style: TextStyle(
                             fontSize: 16,

@@ -17,36 +17,33 @@ class MenuDrawer extends StatelessWidget {
         ),
       ),
       child: SafeArea(
-        child: Container(
-          color: Colors.white,
-          child: Column(
-            children: [
-              _buildLogoOnly(context),
-              const Divider(thickness: 1, height: 1),
-              const SizedBox(height: 12),
-              Expanded(
-                child: ListView(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  children: [
-                    _buildMenuItem(
-                        context, Icons.dashboard_outlined, 'Home', Routes.HOME),
-                    _buildMenuItem(context, Icons.person_outline, 'My Profile',
-                        Routes.PROFILE),
-                    _buildMenuItem(context, Icons.school_outlined, 'My Courses',
-                        Routes.COURSES),
-                    _buildMenuItem(context, Icons.chat_bubble_outline_outlined,
-                        'Chat', Routes.CHAT),
-                    _buildMenuItem(context, Icons.assignment_outlined,
-                        'Assessments', Routes.TESTSERIES),
-                    _buildMenuItem(context, Icons.settings_outlined, 'Settings',
-                        Routes.SETTINGS),
-                  ],
-                ),
+        child: Column(
+          children: [
+            _buildLogoOnly(context),
+            const Divider(thickness: 1, height: 1),
+            const SizedBox(height: 12),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                children: [
+                  _buildMenuItem(
+                      context, Icons.dashboard_outlined, 'Home', Routes.HOME),
+                  _buildMenuItem(context, Icons.person_outline, 'My Profile',
+                      Routes.PROFILE),
+                  _buildMenuItem(context, Icons.school_outlined, 'My Courses',
+                      Routes.COURSES),
+                  _buildMenuItem(context, Icons.chat_bubble_outline_outlined,
+                      'Chat', Routes.CHAT),
+                  _buildMenuItem(context, Icons.assignment_outlined,
+                      'Assessments', Routes.TESTSERIES),
+                  _buildMenuItem(context, Icons.settings_outlined, 'Settings',
+                      Routes.SETTINGS),
+                ],
               ),
-              const Divider(thickness: 1),
-              _buildLogoutButton(context),
-            ],
-          ),
+            ),
+            const Divider(thickness: 1),
+            _buildLogoutButton(context),
+          ],
         ),
       ),
     );
@@ -74,7 +71,9 @@ class MenuDrawer extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       child: Material(
         borderRadius: BorderRadius.circular(12),
-        color: isActive ? Colors.green.shade50 : Colors.transparent,
+        color: isActive
+            ? Theme.of(context).primaryColor.withValues(alpha: 0.1)
+            : Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: () {
@@ -88,7 +87,9 @@ class MenuDrawer extends StatelessWidget {
             child: Row(
               children: [
                 Icon(icon,
-                    color: isActive ? Colors.green : Colors.grey[700],
+                    color: isActive
+                        ? Theme.of(context).primaryColor
+                        : Colors.grey[700],
                     size: 22),
                 const SizedBox(width: 16),
                 Text(
@@ -96,7 +97,9 @@ class MenuDrawer extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-                    color: isActive ? Colors.green : Colors.grey[800],
+                    color: isActive
+                        ? Theme.of(context).primaryColor
+                        : Colors.grey[800],
                   ),
                 ),
               ],
