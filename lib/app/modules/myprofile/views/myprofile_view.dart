@@ -1,23 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/myprofile_controller.dart';
+import 'package:lms_app/app/modules/profile/controllers/profile_controller.dart';
+import 'package:lms_app/app/utils/widgets/custom_loading_button.dart';
 
-const Color backgroundColor = Color.fromARGB(255, 244, 244, 244);
-const Color primaryColor = Color(0xFF007BFF); // Your primary color
-
-class MyprofileView extends GetView<MyprofileController> {
+class MyprofileView extends GetView<ProfileController> {
   const MyprofileView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
       appBar: AppBar(
         title: const Text('My Profile'),
         centerTitle: true,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -38,21 +32,21 @@ class MyprofileView extends GetView<MyprofileController> {
                       right: 4,
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.green,
+                          color: Theme.of(context).colorScheme.primary,
                           shape: BoxShape.circle,
                           border: Border.all(color: Colors.white, width: 2),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 4,
                               offset: const Offset(0, 2),
                             ),
                           ],
                         ),
                         padding: const EdgeInsets.all(6),
-                        child: const Icon(
+                        child: Icon(
                           Icons.edit,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.onPrimary,
                           size: 18,
                         ),
                       ),
@@ -63,12 +57,15 @@ class MyprofileView extends GetView<MyprofileController> {
               const SizedBox(height: 32),
 
               // Name
-              _buildTextField(label: 'Name', initialValue: 'Prasanth'),
+              _buildTextField(
+                  label: 'Name',
+                  initialValue: controller.userDetails.user?.fullName),
               const SizedBox(height: 16),
 
               // Phone Number
               _buildTextField(
-                  label: 'Phone Number', initialValue: '9876543210'),
+                  label: 'Phone Number',
+                  initialValue: controller.userDetails.user?.mobileNo),
               const SizedBox(height: 12),
 
               // Phone Update Button
@@ -76,32 +73,16 @@ class MyprofileView extends GetView<MyprofileController> {
 
               // Email
               _buildTextField(
-                  label: 'Email', initialValue: 'prasanth@gmail.com'),
+                  label: 'Email',
+                  initialValue: controller.userDetails.user?.email),
 
               const SizedBox(height: 32),
 
               // Update Profile Button
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Handle profile update
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: const Text(
-                    'Update Profile',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white),
-                  ),
-                ),
+                child: CustomLoadingButton(
+                    text: 'Update Profile', onPressed: () {}),
               ),
             ],
           ),

@@ -19,7 +19,6 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     final HomeController controller = Get.find<HomeController>();
-    final pageController = PageController();
     final pageIndex = ValueNotifier(0);
     final carouselController = PageController();
 
@@ -102,12 +101,14 @@ class _HomeViewState extends State<HomeView> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            AutoSizeText(
-              'Hi ${controller.userDetails.student?.studentName ?? controller.userDetails.user?.fullName ?? ""} 👋',
-              style: TextStyle(fontSize: 18),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              minFontSize: 14,
+            Obx(
+              () => AutoSizeText(
+                'Hi ${controller.userDetails.student?.studentName ?? controller.userDetails.user?.fullName ?? ""} 👋',
+                style: TextStyle(fontSize: 18),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                minFontSize: 14,
+              ),
             ),
             Text(
               "Let's start learning!",

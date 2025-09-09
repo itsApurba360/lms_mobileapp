@@ -1,23 +1,11 @@
 import 'package:get/get.dart';
+import 'package:lms_app/app/controllers/user_details_controller.dart';
+import 'package:lms_app/app/models/user_details.dart';
 
 class ProfileController extends GetxController {
-  //TODO: Implement ProfileController
+  
+  final _userDetailsController = Get.find<UserDetailsController>();
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
-  }
+  UserDetails get userDetails => _userDetailsController.userDetails.value;
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }

@@ -9,15 +9,11 @@ class ProfileView extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    const Color primaryColor = Colors.green;
-    const Color backgroundColor = Color.fromARGB(255, 244, 244, 244);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
         centerTitle: true,
       ),
-      backgroundColor: backgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -37,12 +33,12 @@ class ProfileView extends GetView<ProfileController> {
                     right: 4,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: primaryColor,
+                        color: Theme.of(context).colorScheme.primary,
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.white, width: 2),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
+                            color: Colors.black.withValues(alpha: 0.1),
                             blurRadius: 4,
                             offset: const Offset(0, 2),
                           ),
@@ -60,8 +56,10 @@ class ProfileView extends GetView<ProfileController> {
               ),
             ),
             const SizedBox(height: 14),
-            const Text(
-              "Prasanth",
+            Text(
+              controller.userDetails.student?.studentName ??
+                  controller.userDetails.user?.fullName ??
+                  "",
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -83,14 +81,14 @@ class ProfileView extends GetView<ProfileController> {
                     onTap: () {
                       Get.toNamed(Routes.MYPROFILE);
                     },
-                    iconColor: primaryColor,
+                    iconColor: Theme.of(context).colorScheme.primary,
                   ),
                   _buildMenuItem(
                     context,
                     icon: Icons.menu_book_rounded,
                     label: 'My Courses',
                     onTap: () {},
-                    iconColor: primaryColor,
+                    iconColor: Theme.of(context).colorScheme.primary,
                   ),
                   _buildMenuItem(
                     context,
@@ -99,28 +97,28 @@ class ProfileView extends GetView<ProfileController> {
                     onTap: () {
                       Get.toNamed(Routes.SETTINGS);
                     },
-                    iconColor: primaryColor,
+                    iconColor: Theme.of(context).colorScheme.primary,
                   ),
                   _buildMenuItem(
                     context,
                     icon: Icons.help_outline,
                     label: 'Help Center',
                     onTap: () {},
-                    iconColor: primaryColor,
+                    iconColor: Theme.of(context).colorScheme.primary,
                   ),
                   _buildMenuItem(
                     context,
                     icon: Icons.privacy_tip_outlined,
                     label: 'Privacy Policy',
                     onTap: () {},
-                    iconColor: primaryColor,
+                    iconColor: Theme.of(context).colorScheme.primary,
                   ),
                   _buildMenuItem(
                     context,
                     icon: Icons.logout,
                     label: 'Log out',
                     onTap: () => showLogoutConfirmation(context),
-                    iconColor: primaryColor,
+                    iconColor: Theme.of(context).colorScheme.primary,
                   ),
                 ],
               ),
@@ -148,8 +146,8 @@ class ProfileView extends GetView<ProfileController> {
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(12),
-          splashColor: iconColor.withOpacity(0.15),
-          highlightColor: iconColor.withOpacity(0.05),
+          splashColor: iconColor.withValues(alpha: 0.15),
+          highlightColor: iconColor.withValues(alpha: 0.05),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             child: Row(
