@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:lms_app/app/controllers/user_details_controller.dart';
 import 'package:lms_app/app/models/user_details.dart';
+import 'package:lms_app/app/routes/app_pages.dart';
 
 class HomeController extends GetxController {
   
@@ -12,8 +13,23 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _userDetailsController.getUserDetails();
+    verifyUser();
   }
+  
+  Future<void> verifyUser() async {
+    try {
+      await _userDetailsController.getUserDetails();
+      if (userDetails.isVerified == 0) {
+        Get.toNamed(Routes.OTP_VERIFICATION, arguments: {
+          'email': userDetails.student?.email,
+          'mobileNo': userDetails.student?.mobileNo,
+        });
+      }
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
+  }
+
 
   // Get homepage data
   // Future<void> getHomepageData() async {

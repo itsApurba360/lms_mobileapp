@@ -80,7 +80,7 @@ class MenuDrawer extends StatelessWidget {
           onTap: () {
             Navigator.pop(context);
             if (!isActive) {
-              Get.offAllNamed(route);
+              Get.toNamed(route);
             }
           },
           child: Padding(

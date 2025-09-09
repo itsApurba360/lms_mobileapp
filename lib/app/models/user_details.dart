@@ -33,11 +33,13 @@ class UserDetails {
   User? user;
   Student? student;
   List<MessageRole>? roles;
+  int? isVerified;
 
   UserDetails({
     this.user,
     this.student,
     this.roles,
+    this.isVerified,
   });
 
   factory UserDetails.fromJson(Map<String, dynamic> json) => UserDetails(
@@ -48,6 +50,7 @@ class UserDetails {
             ? []
             : List<MessageRole>.from(
                 json["roles"]!.map((x) => MessageRole.fromJson(x))),
+        isVerified: json["is_verified"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -56,6 +59,7 @@ class UserDetails {
         "roles": roles == null
             ? []
             : List<dynamic>.from(roles!.map((x) => x.toJson())),
+        "is_verified": isVerified,
       };
 }
 

@@ -492,7 +492,7 @@ class _HomeViewState extends State<HomeView> {
   }) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(Routes.COURSE_DETAILS);
+        Get.toNamed(Routes.COURSES);
       },
       child: Container(
         width: 180,
