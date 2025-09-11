@@ -414,6 +414,27 @@ class ApiClientController extends GetxController {
       return false;
     }
   }
+  
+  /// Authenticate user with mobile number and password
+  Future<bool> loginWithMobilePassword(
+      String hostUrl, String mobileNo, String password) async {
+    await _setHostUrl(hostUrl);
+    try {
+      final response = await dio.post(
+        "/api/method/lms_360ithub.utils.custom_login.login_with_mobile_password",
+        data: {'mobile_no': mobileNo, 'password': password},
+      );
+
+      final success = _isLoginSuccessful(response);
+      if (success) {
+        _captureAndStoreCookies(response.headers);
+      }
+      return success;
+    } catch (e) {
+      log('✗ Login error: ${e.toString()}', error: e, name: 'Auth');
+      return false;
+    }
+  }
 
   /// New registration
   Future<Response<dynamic>> newRegistration({
@@ -443,11 +464,6 @@ class ApiClientController extends GetxController {
   /// Check if login response indicates success
   bool _isLoginSuccessful(Response response) {
     if (response.statusCode != 200) return false;
-
-    if (response.data is Map) {
-      final message = response.data['message']?.toString().toLowerCase();
-      return message?.contains('logged') ?? false;
-    }
     return true;
   }
 

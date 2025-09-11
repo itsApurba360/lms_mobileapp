@@ -6,10 +6,11 @@ import 'package:lms_app/app/routes/app_pages.dart';
 class LoginController extends GetxController {
   // Email and Password text controllers
   final hostUrlController = TextEditingController(
-    text: 'http://192.168.1.179:8004',
+    text: 'http://192.168.1.175:8004',
   );
   final emailController = TextEditingController(
-    text: 'mohan.ra@360ithub.co.in',
+    // text: 'mohan.ra@360ithub.co.in',
+    text: '90985430401',
   );
   final passwordController = TextEditingController(
     text: 'India@123#',
@@ -24,24 +25,47 @@ class LoginController extends GetxController {
   final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$');
 
   // Login action
-  Future loginWithEmailPassword() async {                                                                    
-    final email = emailController.text.trim();
+
+  // Unified login: accepts either email or mobile number and routes to the right API
+  Future login() async {
+    final identifier = emailController.text.trim();
     final password = passwordController.text.trim();
 
-    if (email.isEmpty || password.isEmpty) {
-      Get.snackbar("Error", "Email and password cannot be empty",
-          snackPosition: SnackPosition.BOTTOM);
+    if (identifier.isEmpty || password.isEmpty) {
+      Get.snackbar(
+        "Error",
+        "Email/Mobile and password cannot be empty",
+        snackPosition: SnackPosition.BOTTOM,
+      );
       return;
     }
 
-    if (!emailRegex.hasMatch(email)) {
-      Get.snackbar("Invalid Email", "Please enter a valid email address",
-          snackPosition: SnackPosition.BOTTOM);
+    final isEmail = emailRegex.hasMatch(identifier);
+    // Accept 8-15 digits with optional leading + for international numbers
+    final isMobile = !isEmail && RegExp(r'^\+?\d{8,15}$').hasMatch(identifier);
+
+    bool success = false;
+
+    if (isEmail) {
+      success = await apiClientController.loginWithEmailPassword(
+        hostUrlController.text,
+        identifier,
+        password,
+      );
+    } else if (isMobile) {
+      success = await apiClientController.loginWithMobilePassword(
+        hostUrlController.text,
+        identifier,
+        password,
+      );
+    } else {
+      Get.snackbar(
+        "Invalid input",
+        "Please enter a valid email address or mobile number",
+        snackPosition: SnackPosition.BOTTOM,
+      );
       return;
     }
-
-    final success = await apiClientController.loginWithEmailPassword(
-        hostUrlController.text, email, password);
 
     if (success) Get.offAllNamed(Routes.HOME);
   }

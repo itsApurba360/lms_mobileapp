@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lms_app/app/modules/login/controllers/login_controller.dart';
-import 'package:lms_app/app/modules/otp_login/views/otp_login_view.dart';
 import 'package:lms_app/app/routes/app_pages.dart';
 import 'package:lms_app/app/utils/widgets/custom_loading_button.dart';
 
@@ -45,12 +44,12 @@ class _LoginViewState extends State<LoginView> {
 
               const SizedBox(height: 24),
 
-              // Email Input
+              // Email or Mobile Input
               TextFormField(
                 controller: controller.emailController,
                 cursorColor: Colors.grey.shade300,
                 decoration: InputDecoration(
-                  labelText: 'Email',
+                  labelText: 'Email or Mobile',
                   labelStyle: TextStyle(color: Colors.grey.shade700),
                   filled: true,
                   fillColor: Colors.white,
@@ -119,7 +118,7 @@ class _LoginViewState extends State<LoginView> {
                 width: double.infinity,
                 child: CustomLoadingButton(
                   onPressed: () async {
-                    await controller.loginWithEmailPassword();
+                    await controller.login();
                   },
                   text: 'Login',
                 ),
