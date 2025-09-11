@@ -446,7 +446,7 @@ class ApiClientController extends GetxController {
   }) async {
     try {
       await _setHostUrl(hostUrl);
-      return await dio.post(
+      final response = await dio.post(
         '/api/method/lms_360ithub.utils.custom_login.new_registration',
         data: {
           'student_name': studentName,
@@ -455,6 +455,10 @@ class ApiClientController extends GetxController {
           'password': password,
         },
       );
+      if (response.statusCode != 200) {
+        await logout();
+      }
+      return response;
     } on DioException catch (e) {
       log('✗ newRegistration error: ${e.message}', error: e, name: 'Auth');
       rethrow;
@@ -468,7 +472,7 @@ class ApiClientController extends GetxController {
   }
 
   /// Clear user session and stored data
-  void logout() {
+  Future<void> logout() async {
     dio.options.headers.remove('Cookie');
     _storage.remove(_cookieKey);
     _storage.remove(_hostKey);
