@@ -17,6 +17,8 @@ import '../modules/examinstructions/bindings/examinstructions_binding.dart';
 import '../modules/examinstructions/views/examinstructions_view.dart';
 import '../modules/examlist/bindings/examlist_binding.dart';
 import '../modules/examlist/views/examlist_view.dart';
+import '../modules/forgot_password/bindings/forgot_password_binding.dart';
+import '../modules/forgot_password/views/forgot_password_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
@@ -158,6 +160,11 @@ class AppPages {
       name: _Paths.OTP_VERIFICATION,
       page: () => const OtpVerificationView(),
       binding: OtpVerificationBinding(),
+    ),
+    GetPage(
+      name: _Paths.FORGOT_PASSWORD,
+      page: () => const ForgotPasswordView(),
+      binding: ForgotPasswordBinding(),
     ),
   ];
 }

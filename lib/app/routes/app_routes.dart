@@ -24,6 +24,7 @@ abstract class Routes {
   static const ADDRESS_FORM = _Paths.ADDRESS_FORM;
   static const REGISTER = _Paths.REGISTER;
   static const OTP_VERIFICATION = _Paths.OTP_VERIFICATION;
+  static const FORGOT_PASSWORD = _Paths.FORGOT_PASSWORD;
 }
 
 abstract class _Paths {
@@ -49,4 +50,5 @@ abstract class _Paths {
   static const ADDRESS_FORM = '/address-form';
   static const REGISTER = '/register';
   static const OTP_VERIFICATION = '/otp-verification';
+  static const FORGOT_PASSWORD = '/forgot-password';
 }

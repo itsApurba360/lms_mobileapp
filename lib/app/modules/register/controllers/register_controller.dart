@@ -11,7 +11,7 @@ class RegisterController extends GetxController {
   final passwordController = TextEditingController();
   final obscurePassword = true.obs;
   final hostUrlController =
-      TextEditingController(text: 'http://192.168.1.175:8004');
+      TextEditingController(text: 'http://192.168.1.157:8004');
 
   final apiClientController = Get.find<ApiClientController>();
 

@@ -104,3 +104,19 @@ String getVimeoId(String? raw) {
   log(id, name: 'vimeoId');
   return id;
 }
+
+bool validateEmailOrMobile(String value) {
+  final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+  final phoneRegex = RegExp(r'^\+?\d{8,15}$');
+  return emailRegex.hasMatch(value) || phoneRegex.hasMatch(value);
+}
+
+bool isValidEmail(String value) {
+  final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+  return emailRegex.hasMatch(value);
+}
+
+bool isValidMobile(String value) {
+  final phoneRegex = RegExp(r'^\+?\d{8,15}$');
+  return phoneRegex.hasMatch(value);
+}

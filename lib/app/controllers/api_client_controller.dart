@@ -465,6 +465,19 @@ class ApiClientController extends GetxController {
     }
   }
 
+  Future<Response<dynamic>> forgotPassword(
+      {required String hostUrl, required Map<dynamic, dynamic> data}) async {
+    try {
+      await _setHostUrl(hostUrl);
+      final response = await post(
+          '/api/method/lms_360ithub.api.user_forget_password',
+          data: data);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   /// Check if login response indicates success
   bool _isLoginSuccessful(Response response) {
     if (response.statusCode != 200) return false;
