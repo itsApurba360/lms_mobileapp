@@ -87,7 +87,7 @@ class ApiClientController extends GetxController {
 
   /// Handle incoming responses - manage cookies, auth, and errors
   void _onResponse(Response response, ResponseInterceptorHandler handler) {
-    _handleCookieUpdates(response);
+    // _handleCookieUpdates(response);
     _logResponse(response);
     _handleAuthenticationErrors(response);
     _handleHttpErrors(response);
