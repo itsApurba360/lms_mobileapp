@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lms_app/app/controllers/api_client_controller.dart';
-import 'package:lms_app/app/routes/app_pages.dart';
+import 'package:lms_app/app/controllers/global_controller.dart';
 import 'package:lms_app/app/utils/helpers.dart';
 
 class ForgotPasswordController extends GetxController {
@@ -10,9 +10,8 @@ class ForgotPasswordController extends GetxController {
   final otpController = TextEditingController();
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-  final hostUrlController =
-      TextEditingController(text: 'http://192.168.1.157:8004');
   final apiClientController = Get.find<ApiClientController>();
+  final globalController = Get.find<GlobalController>();
   final otpSent = false.obs;
 
   Future<void> forgotPassword() async {
@@ -25,7 +24,7 @@ class ForgotPasswordController extends GetxController {
         body = {"mobile_no": emailController.text.trim()};
       }
       final response = await apiClientController.forgotPassword(
-          hostUrl: hostUrlController.text.trim(), data: body);
+          hostUrl: globalController.baseUrl.value, data: body);
       if (response.statusCode == 200) {
         otpSent.value = true;
       }

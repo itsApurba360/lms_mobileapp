@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lms_app/app/controllers/api_client_controller.dart';
+import 'package:lms_app/app/controllers/global_controller.dart';
 import 'package:lms_app/app/routes/app_pages.dart';
 
 class RegisterController extends GetxController {
@@ -10,10 +12,9 @@ class RegisterController extends GetxController {
   final mobileNoController = TextEditingController();
   final passwordController = TextEditingController();
   final obscurePassword = true.obs;
-  final hostUrlController =
-      TextEditingController(text: 'http://192.168.1.157:8004');
 
   final apiClientController = Get.find<ApiClientController>();
+  final globalController = Get.find<GlobalController>();
 
   Future newRegistration() async {
     if (!formKey.currentState!.validate()) return;
@@ -22,7 +23,7 @@ class RegisterController extends GetxController {
       email: emailController.text.trim(),
       mobileNo: mobileNoController.text.trim(),
       password: passwordController.text.trim(),
-      hostUrl: hostUrlController.text.trim(),
+      hostUrl: globalController.baseUrl.value,
     );
 
     if (response.statusCode == 200) {

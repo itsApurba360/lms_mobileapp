@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:lms_app/app/controllers/api_client_controller.dart';
+import 'package:lms_app/app/controllers/global_controller.dart';
 import 'package:lms_app/app/controllers/video_playback_controller.dart';
 
 import 'app/routes/app_pages.dart';
@@ -24,6 +25,7 @@ void main() async {
         () {
           Get.put(ApiClientController(), permanent: true);
           Get.put(VideoPlaybackController(), permanent: true);
+          Get.put(GlobalController(), permanent: true);
         },
       ),
       theme: ThemeData(

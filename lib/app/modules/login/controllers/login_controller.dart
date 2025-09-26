@@ -1,20 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lms_app/app/controllers/api_client_controller.dart';
+import 'package:lms_app/app/controllers/global_controller.dart';
 import 'package:lms_app/app/routes/app_pages.dart';
 
 class LoginController extends GetxController {
   // Email and Password text controllers
-  final hostUrlController = TextEditingController(
-    text: 'http://192.168.1.157:8004',
-  );
-  final emailController = TextEditingController(
-    // text: 'mohan.ra@360ithub.co.in',
-    text: '90985430401',
-  );
-  final passwordController = TextEditingController(
-    text: 'India@123#',
-  );
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   final apiClientController = Get.find<ApiClientController>();
 
@@ -24,7 +18,17 @@ class LoginController extends GetxController {
   // Email validation regex
   final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}$');
 
-  // Login action
+  final globalController = Get.find<GlobalController>();
+
+  @override
+  void onInit() {
+    super.onInit();
+    if (kDebugMode) {
+      // emailController.text = "mohan.ra@360ithub.co.in";
+      emailController.text = "90985430401";
+      passwordController.text = "India@123#";
+    }
+  }
 
   // Unified login: accepts either email or mobile number and routes to the right API
   Future login() async {
@@ -35,7 +39,9 @@ class LoginController extends GetxController {
       Get.snackbar(
         "Error",
         "Email/Mobile and password cannot be empty",
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Theme.of(Get.context!).colorScheme.primary,
+        colorText: Theme.of(Get.context!).colorScheme.onPrimary,
       );
       return;
     }
@@ -48,13 +54,13 @@ class LoginController extends GetxController {
 
     if (isEmail) {
       success = await apiClientController.loginWithEmailPassword(
-        hostUrlController.text,
+        globalController.baseUrl.value,
         identifier,
         password,
       );
     } else if (isMobile) {
       success = await apiClientController.loginWithMobilePassword(
-        hostUrlController.text,
+        globalController.baseUrl.value,
         identifier,
         password,
       );
@@ -62,7 +68,9 @@ class LoginController extends GetxController {
       Get.snackbar(
         "Invalid input",
         "Please enter a valid email address or mobile number",
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Theme.of(Get.context!).colorScheme.primary,
+        colorText: Theme.of(Get.context!).colorScheme.onPrimary,
       );
       return;
     }
