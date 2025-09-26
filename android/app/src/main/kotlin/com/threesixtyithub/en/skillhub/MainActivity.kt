@@ -1,4 +1,4 @@
-package com.lms.lms_app
+package com.threesixtyithub.en.skillhub
 
 import io.flutter.embedding.android.FlutterActivity
 

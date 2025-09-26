@@ -53,7 +53,7 @@ class _HomeViewState extends State<HomeView> {
         title: Center(
           child: Image.asset(
             'assets/images/logo.png',
-            width: 100,
+            width: 50,
           ),
         ),
       ),
