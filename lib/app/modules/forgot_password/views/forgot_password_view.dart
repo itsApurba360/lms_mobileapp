@@ -132,80 +132,99 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                                       value?.length != 4 ? 'Invalid OTP' : null,
                                 ),
                                 const SizedBox(height: 16),
-                                TextFormField(
-                                  controller: controller.newPasswordController,
-                                  cursorColor: Colors.grey.shade300,
-                                  decoration: InputDecoration(
-                                    labelText: 'New Password',
-                                    labelStyle:
-                                        TextStyle(color: Colors.grey.shade700),
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                Obx(
+                                  () => TextFormField(
+                                    controller:
+                                        controller.newPasswordController,
+                                    obscureText:
+                                        !controller.showNewPassword.value,
+                                    cursorColor: Colors.grey.shade300,
+                                    decoration: InputDecoration(
+                                      labelText: 'New Password',
+                                      labelStyle: TextStyle(
+                                          color: Colors.grey.shade700),
+                                      suffixIcon: IconButton(
+                                        icon: Icon(
+                                          controller.showNewPassword.value
+                                              ? Icons.visibility
+                                              : Icons.visibility_off,
+                                          color: Colors.grey,
+                                        ),
+                                        onPressed: () {
+                                          controller
+                                              .toggleNewPasswordVisibility();
+                                        },
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide(
+                                            color: Colors.grey.shade300),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide(
+                                            color: Colors.grey.shade300,
+                                            width: 1.5),
+                                      ),
+                                      floatingLabelStyle: TextStyle(
+                                          color: Colors.grey.shade700),
                                     ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                      borderSide: BorderSide(
-                                          color: Colors.grey.shade300),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                      borderSide: BorderSide(
-                                          color: Colors.grey.shade300,
-                                          width: 1.5),
-                                    ),
-                                    floatingLabelStyle:
-                                        TextStyle(color: Colors.grey.shade700),
+                                    validator: controller.validatePassword,
+                                    keyboardType: TextInputType.visiblePassword,
                                   ),
-                                  validator: (value) {
-                                    if (value == null || value.trim().isEmpty) {
-                                      return 'Field cannot be empty';
-                                    }
-                                    return null;
-                                  },
-                                  keyboardType: TextInputType.visiblePassword,
                                 ),
                                 const SizedBox(height: 16),
-                                TextFormField(
-                                  controller:
-                                      controller.confirmPasswordController,
-                                  cursorColor: Colors.grey.shade300,
-                                  decoration: InputDecoration(
-                                    labelText: 'Confirm Password',
-                                    labelStyle:
-                                        TextStyle(color: Colors.grey.shade700),
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                Obx(
+                                  () => TextFormField(
+                                    controller:
+                                        controller.confirmPasswordController,
+                                    obscureText:
+                                        !controller.showConfirmPassword.value,
+                                    cursorColor: Colors.grey.shade300,
+                                    decoration: InputDecoration(
+                                      labelText: 'Confirm Password',
+                                      labelStyle: TextStyle(
+                                          color: Colors.grey.shade700),
+                                      suffixIcon: IconButton(
+                                        icon: Icon(
+                                          controller.showConfirmPassword.value
+                                              ? Icons.visibility
+                                              : Icons.visibility_off,
+                                          color: Colors.grey,
+                                        ),
+                                        onPressed: () {
+                                          controller
+                                              .toggleConfirmPasswordVisibility();
+                                        },
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide(
+                                            color: Colors.grey.shade300),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide(
+                                            color: Colors.grey.shade300,
+                                            width: 1.5),
+                                      ),
+                                      floatingLabelStyle: TextStyle(
+                                          color: Colors.grey.shade700),
                                     ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                      borderSide: BorderSide(
-                                          color: Colors.grey.shade300),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                      borderSide: BorderSide(
-                                          color: Colors.grey.shade300,
-                                          width: 1.5),
-                                    ),
-                                    floatingLabelStyle:
-                                        TextStyle(color: Colors.grey.shade700),
+                                    validator:
+                                        controller.validateConfirmPassword,
+                                    keyboardType: TextInputType.visiblePassword,
                                   ),
-                                  validator: (value) {
-                                    if (value == null || value.trim().isEmpty) {
-                                      return 'Field cannot be empty';
-                                    }
-                                    if (controller.newPasswordController.text
-                                            .trim() !=
-                                        value.trim()) {
-                                      return 'Passwords do not match';
-                                    }
-                                    return null;
-                                  },
-                                  keyboardType: TextInputType.visiblePassword,
                                 ),
                               ],
                             ),

@@ -14,6 +14,8 @@ class ForgotPasswordController extends GetxController {
   final apiClientController = Get.find<ApiClientController>();
   final globalController = Get.find<GlobalController>();
   final otpSent = false.obs;
+  final showNewPassword = false.obs;
+  final showConfirmPassword = false.obs;
 
   Future<void> forgotPassword() async {
     if (formKey.currentState!.validate()) {
@@ -30,6 +32,34 @@ class ForgotPasswordController extends GetxController {
         otpSent.value = true;
       }
     }
+  }
+
+  void toggleNewPasswordVisibility() {
+    showNewPassword.value = !showNewPassword.value;
+  }
+
+  void toggleConfirmPasswordVisibility() {
+    showConfirmPassword.value = !showConfirmPassword.value;
+  }
+
+  String? validatePassword(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Password cannot be empty';
+    }
+    if (value.trim().length < 6) {
+      return 'Password must be at least 6 characters';
+    }
+    return null;
+  }
+
+  String? validateConfirmPassword(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Please confirm your password';
+    }
+    if (value.trim() != newPasswordController.text.trim()) {
+      return 'Passwords do not match';
+    }
+    return null;
   }
 
   Future<void> verifyOtpAndUpdatePassword() async {
@@ -50,11 +80,8 @@ class ForgotPasswordController extends GetxController {
         Get.snackbar("Success",
             "Password updated successfully! Please use new password to login",
             backgroundColor: Theme.of(Get.context!).colorScheme.primary,
-            colorText: Theme.of(Get.context!).colorScheme.onPrimary,
-            icon: Icon(
-              Icons.check_circle,
-              color: Theme.of(Get.context!).colorScheme.onPrimary,
-            ));
+          colorText: Theme.of(Get.context!).colorScheme.onPrimary,
+        );
         Get.offAndToNamed(Routes.LOGIN);
       }
     }
