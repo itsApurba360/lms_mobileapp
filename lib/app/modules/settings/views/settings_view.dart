@@ -27,19 +27,19 @@ class SettingsView extends GetView<SettingsController> {
                     isObscured: controller.currentObscured,
                     toggle: () => controller.toggleObscure('current'),
                   ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () {
-                        // Handle forgot password action
-                      },
-                      child: Text(
-                        "Forgot Password?",
-                        style: TextStyle(color: Theme.of(context).primaryColor),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
+                  // Align(
+                  //   alignment: Alignment.centerRight,
+                  //   child: TextButton(
+                  //     onPressed: () {
+                  //       // Handle forgot password action
+                  //     },
+                  //     child: Text(
+                  //       "Forgot Password?",
+                  //       style: TextStyle(color: Theme.of(context).primaryColor),
+                  //     ),
+                  //   ),
+                  // ),
+                  const SizedBox(height: 20), 
                   _passwordField(
                     label: 'New Password',
                     controller: controller.newPasswordController,
